@@ -1,7 +1,8 @@
 # Mountaineer Turbo Writeup
 
 ## Task Information
-- **Mountaineer Turbo** - **Category:** misc. / OSINT  
+- **Author:** fantomet
+- **Categories:** misc, osint 
 - **Provided Material:** Image of a Mountain
 
 ## Challenge Description
