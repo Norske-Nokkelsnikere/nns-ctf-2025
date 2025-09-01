@@ -10,7 +10,7 @@ This is a writeup of the solution to the "This then what huh?" CTF challenge. Th
 *   **Description:** Ponies missing :( return if found
 
 ***
-# بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+
 
 ### Part 1: Analyzing the Backend 
 
