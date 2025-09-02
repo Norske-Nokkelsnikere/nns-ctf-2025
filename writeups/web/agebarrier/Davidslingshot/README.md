@@ -141,7 +141,3 @@ NNS{D4tes_4nd_t1m3z0n3s_ar3_h4rd_06993d8ad651}
 
 ---
 
-✅ This Markdown will render perfectly in GitHub with code blocks, headers, and sections.
-
-Do you want me to also prepare the **outer challenge README.md** (short one with just description) separately, so you can have both challenge + team writeup in place?
-
