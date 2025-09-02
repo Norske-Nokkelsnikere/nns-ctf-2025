@@ -1,49 +1,137 @@
-First we check the challenge adress and what is located there:
+# Challenge Walkthrough: Inspecting Deployed Bytecode
 
-      cast code 0x8389439d8C910bF286ccB6386BFdCDA46899a8b0 --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+## 1. Checking the Challenge Address
 
-We get 0x back, meaning there is no contract at that location.
+We begin by checking whether there is a contract deployed at the challenge address:
 
-Next we check which block is the current one
+```bash
+cast code 0x8389439d8C910bF286ccB6386BFdCDA46899a8b0 \
+  --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+```
 
-cast block-number --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+The result is:
 
-This returns 1 meaning we are currently in block one. If we check this block one for its transactions via the command
-      
-      cast block 1 --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+```
+0x
+```
 
-we get the following result:
-![image](transactions.png)
+This indicates **no contract is currently deployed** at that address.
 
-with the intersting part being
-        transactions:        [
-        0x1bb3069a68d7adf79d11c23e74a9ad7bc8059fc6bd06a1b26fe9722337a4ba78
+---
+
+## 2. Checking the Current Block Number
+
+Next, we check the current block number to understand the blockchain's state:
+
+```bash
+cast block-number \
+  --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+```
+
+This returns:
+
+```
+1
+```
+
+So we are currently at **block 1** — this is likely a local or custom chain.
+
+---
+
+## 3. Inspecting Block 1
+
+Let’s investigate block 1 for transactions:
+
+```bash
+cast block 1 \
+  --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+```
+
+We find a transaction:
+
+```
+transactions: [
+  0x1bb3069a68d7adf79d11c23e74a9ad7bc8059fc6bd06a1b26fe9722337a4ba78
 ]
+```
 
-This means there has been a transaction for our challenge adress!
+This could be related to our challenge.
 
-If we look at that transaction closer
+---
 
-        cast tx 0x1bb3069a68d7adf79d11c23e74a9ad7bc8059fc6bd06a1b26fe9722337a4ba78 --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+## 4. Analyzing the Transaction
 
-we get the following output:
+Let’s get the full transaction details:
 
-![image](bytecode.png)
+```bash
+cast tx 0x1bb3069a68d7adf79d11c23e74a9ad7bc8059fc6bd06a1b26fe9722337a4ba78 \
+  --rpc-url https://3560776d-0bfb-4bf6-8ae0-15f628670cef.chall.nnsc.tf/rpc
+```
 
-We are interested in the input field here that contains bytecode
+Within the output, we find a long `input` field containing raw bytecode:
 
-        input                0x608060405234801561000f575f5ffd5b5060405161024c38038061024c833981810160405281019061003191906101f1565b8073ffffffffffffffffffffffffffffffffffffffff16ff5b5f604051905090565b5f5ffd5b5f5ffd5b5f5ffd5b5f5ffd5b5f601f19601f8301169050919050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52604160045260245ffd5b6100a982610063565b810181811067ffffffffffffffff821117156100c8576100c7610073565b5b80604052505050565b5f6100da61004a565b90506100e682826100a0565b919050565b5f67ffffffffffffffff82111561010557610104610073565b5b61010e82610063565b9050602081019050919050565b8281835e5f83830152505050565b5f61013b610136846100eb565b6100d1565b9050828152602081018484840111156101575761015661005f565b5b61016284828561011b565b509392505050565b5f82601f83011261017e5761017d61005b565b5b815161018e848260208601610129565b91505092915050565b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f6101c082610197565b9050919050565b6101d0816101b6565b81146101da575f5ffd5b50565b5f815190506101eb816101c7565b92915050565b5f5f6040838503121561020757610206610053565b5b5f83015167ffffffffffffffff81111561022457610223610057565b5b6102308582860161016a565b9250506020610241858286016101dd565b915050925092905056fe0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000a753d8b93f2b6d54761a6aa04f173b5d5f461dca000000000000000000000000000000000000000000000000000000000000027833333334333333313333333433333331333333343333333633333337333633323333333333333331333333353336333633333337333333393333333333333330333333363333333933333333333333333333333533363336333333363333333233333336333333373333333633333336333333353336333633333337333333343333333733333332333333363333333733333335333333303333333633333332333333363333333133333336333333373333333633333335333333363336333533333337333333303333333633333337333333353333333033333336333333353333333733333332333333363336333533333336333333373333333633333332333333363333333533333335333633363333333633333331333333333333333033333336333633313333333533363336333333373333333933333333333333333333333633333337333333333333333533333335333633363333333733333334333333333333333333333336333333373333333533363336333333363333333733333337333333353333333333333331333333333333333533333335333633363333333633333333333333333333333433333336333333353333333633333337333333363336333333333335333633363333333333333335333333363333333733333333333333343333333633333335333333363333333733333333333333333333333733333331333333353336333633333337333333303333333333333335333333333333333533333333333333373333333333333333333333333333333633333333333333373333333333333333333333333333333733333337333333333333333333333336333333363336333533333337333633340000000000000000
+```
+input: 0x608060405234801561000f575f5ffd5b5060405161...
+```
 
+This is **contract creation bytecode**, meaning the transaction deployed a contract.
 
-This is bytecode of a contract! If we look at it a bit more closely using a decompiler like [ethervm.io](https://ethervm.io/decompile), we see a constructor in the beginning and then a lot of garbage at the end. If we paste that garbage into cyberchef and decode it from hex three times we get a string that looks suspiciously like a flag
+---
 
+## 5. Decompiling the Contract
 
-![image](cyberchef.png)
+We paste the bytecode into [ethervm.io](https://ethervm.io/decompile) and observe:
 
+- A valid constructor
+- A large block of data appended at the end of the contract
+
+This appended data doesn’t look like executable bytecode — it’s likely **embedded data**.
+
+---
+
+## 6. Decoding Embedded Data
+
+We extract the trailing portion of the bytecode and decode it using [CyberChef](https://gchq.github.io/CyberChef/):
+
+- Apply **Hex Decode** three times
+
+The result is:
+
+```
 AAF{1_y0i3_bgf_trgPbagenpgPerngbe_a0j_y3g5_t3g_gu15_c4egl_5g4eg3q_p55736737s6n}
+```
 
+This looks like a **scrambled flag**.
 
-Of course it does not conform to our flag format or make any sense. However if you have played a CTF before you will feel the cold knive of brutus in your back. It is probably encrypted with the caesar cypher. After some shifting of the letters we get:
+---
 
+## 7. Decrypting with Caesar Cipher
+
+The decoded string is Caesar-encrypted. After shifting the characters, we get:
+
+```
 NNS{1_l0v3_ots_getContractCreator_n0w_l3t5_g3t_th15_p4rty_5t4rt3d_c55736737f6a}
-        
+```
+
+🎉 **Flag recovered!**
+
+---
+
+## 🏁 Final Flag
+
+```
+NNS{1_l0v3_ots_getContractCreator_n0w_l3t5_g3t_th15_p4rty_5t4rt3d_c55736737f6a}
+```
+
+---
+
+## Notes
+
+- Contract was deployed in block 1
+- Flag was embedded in the contract bytecode
+- Decoding steps:
+  1. Extract bytecode
+  2. Hex-decode x3
+  3. Caesar decrypt
+
+This challenge tested understanding of low-level Ethereum contract deployment and some CTF-style data hiding techniques.
