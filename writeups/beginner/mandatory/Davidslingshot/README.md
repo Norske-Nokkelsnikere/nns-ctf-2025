@@ -102,5 +102,3 @@ The decrypted output gave the correct **flag** 🎉.
 
 ---
 
-👉 Do you also want me to **include a small Python script** (like `solve.py`) that does the XOR automatically, so it fits nicely into your GitHub CTF repo structure?
-
