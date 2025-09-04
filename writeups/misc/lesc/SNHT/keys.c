@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stddef.h>
+
+/** Structs from zephyr/subsys/bluetooth/host/keys.h and zephyr/bluetooth/addr.h */
+
+/** Length in bytes of a standard Bluetooth address */
+#define BT_ADDR_SIZE 6
+
+/** Bluetooth Device Address */
+typedef struct {
+	uint8_t  val[BT_ADDR_SIZE];
+} bt_addr_t;
+
+/** Bluetooth LE Device Address */
+typedef struct {
+	uint8_t      type;
+	bt_addr_t a;
+} bt_addr_le_t;
+
+struct bt_ltk {
+	uint8_t rand[8];
+	uint8_t ediv[2];
+	uint8_t val[16];
+};
+
+struct bt_irk {
+	uint8_t val[16];
+	bt_addr_t rpa;
+};
+
+struct bt_keys {
+	uint8_t id;
+	bt_addr_le_t addr;
+	uint8_t state;
+	uint8_t storage_start[0] __attribute__((aligned(sizeof(void *))));
+	uint8_t enc_size;
+	uint8_t flags;
+	uint16_t keys;
+	struct bt_ltk ltk;
+	struct bt_irk irk;
+	struct bt_ltk periph_ltk;
+};
+
+uint8_t key_data[] = {
+        0x10, 0x11, 0x3A, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE4, 0x15,
+        0xF9, 0xC6, 0x7E, 0x0E, 0xC3, 0x76, 0x52, 0x66,
+        0xAD, 0x87, 0x6B, 0xC7, 0x13, 0xD5, 0xE1, 0xCC,
+        0xDA, 0x4A, 0x02, 0x42, 0xD0, 0x7D, 0xDB, 0xC7,
+        0x2E, 0xA8, 0xC6, 0xAB, 0x2E, 0xD5, 0x3C, 0x30,
+        0x73, 0x9C, 0x19, 0x75, 0xA8, 0xB6, 0x60, 0x72,
+        0x3C, 0xBD, 0x1E, 0x96, 0x5B, 0xA9, 0x18, 0xB6,
+        0xA0, 0xF4, 0xD1, 0xDC, 0x00, 0x00, 0x00, 0x00,
+        0xEB, 0xB0, 0x67, 0x61, 0xEE, 0x14, 0x6A, 0x61,
+        0x05, 0x0F, 0x8E, 0x70, 0x98, 0xA1, 0xCB, 0x41,
+        0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00
+    };
+
+int main() {
+    struct bt_keys keys;
+
+    memcpy(&keys.storage_start, key_data, sizeof(struct bt_keys) - offsetof(struct bt_keys, storage_start));
+
+    printf("LTK: ");
+    for (int i = 0; i < 16; i++) {
+        printf("%02X", keys.ltk.val[i]);
+    }
+    printf("\n");
+
+    printf("IRK: ");
+    for (int i = 0; i < 16; i++) {
+        printf("%02X", keys.irk.val[i]);
+    }
+    printf("\n");
+
+}
