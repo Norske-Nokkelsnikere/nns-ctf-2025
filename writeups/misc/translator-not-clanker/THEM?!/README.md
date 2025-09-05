@@ -2,8 +2,6 @@
 
 ## Files related to solving the challenge are in this writeup's root folder
 
-## Please open issue should you have any questions. It will be added to the respective Q&A section
-
 **Author: Taokyle - THEM?!**
 
 OS: I have skill issue, kept falling into rabbit holes (details not included in this writeup cuz Im too ashamed)
@@ -74,9 +72,14 @@ However, we can see that it should be **splitting** the inputted message **by sp
 
 ## The Beginning - checkpoint Q&A
 
-Q - what do LGTM and RTFM mean?\
+Q - What do LGTM and RTFM mean?\
 A - LGTM probably means "Looks Good To Me", and RTFM probably means "Read The Fucking Manual".\
 I searched them up, and it seems that a new word will appear in my code soon lol
+
+Q - What is Base64?\
+A - Base64 is a way to represent any bit sequence in the form of `a-z`, `A-Z`, `0-9`, and 2 customizable symbols (usually `+/`)\
+It works by transforming any given sequence into bits, and then seperating them every 6 bits. That way, they can be represented by just (2**6=)64 printable ascii characters.\
+For more info, go check out [this wikipedia page](https://en.wikipedia.org/wiki/Base64)
 
 ## Leaking codes
 
@@ -94,14 +97,17 @@ Traceback (most recent call last):
 UnicodeEncodeError: 'utf-8' codec can't encode character '\udc9b' in position 1: surrogates not allowed
 ```
 
-now we know some more things about the code, and it seems that the flag will go through the unused `as_bits()` function, as its name is now *flag_bits* instead of *FLAG*.
+Now we know some more things about the code.
+
+First, it seems that the flag will go through the unused `as_bits()` function, as its name is now *flag_bits* instead of *FLAG*.\
+Then, the word (assumed from *w* in `w.encode()`) will go through some operations with the flag bits before/after converting it into base64.
 
 There also exists a variable *i*, assumed to be short for **index**, which means that there would be some difference for every word.
 
 ## Leaking codes - checkpoint Q&A
 
 Q - arnt the content provided from the leaked code alr in `b64e(data: bytes, flag_bits: str)`?\
-A - Yeah no, the flag bits part is quite important imo
+A - Yeah no, the flag bits part is quite important imo, as we then know the flag is being split across words
 
 ## Base64
 
@@ -122,7 +128,7 @@ Base64: 111111222222333333444444
 
 So, what if the total chars in ascii is **not** divisible by 3? We can't just leave random hanging misaligned bits??\
 Well, we can place 0s at the end (A=`000000`), but then there would be some extra `\0` at the end of the message after decoding\
-(there's `XXXXXX` `XX` `0000` `0000` `00` `000000`, which is char+`\0\0`. OR there's `XXXXXX` `XX` `XXXX` `XXXX` `00` `000000`, which is char+char+`\0`).
+(there's `XXXXXX` `XX`|`0000` `0000`|`00` `000000`, which is char+`\0\0`. OR there's `XXXXXX` `XX`|`XXXX` `XXXX`|`00` `000000`, which is char+char+`\0`).
 
 Thats why `=` is here. It's purpose is to pad the base64 chars so that the total b64len is divisible by 4, and can decoded into full ascii characters.\
 When you see `=`, it means that the **4 sextet** chunk will be decoded to **2 octet** chunks only (2 ascii char), and the rest of the bytes are ignored.\
@@ -179,6 +185,16 @@ We can see that there are alot of `Y===`s at the end, implying the full flag had
 ...     x = (b64.get(x[0])<<6) | b64.get(x[1]) & 0b1111
 ...     return format(x, 'x')
 ... 
+```
+
+*f(x) takes in a base64 encoded word and takes its first 2 bytes (we know the flag lies in the first 2 bytes cause the 3rd and 4th byte in every word received is a pad `=`)*\
+*then, if it contains flag bits (not `Y===`, aka the second byte is not pad `=`), it converts the word back to binary*\
+*(`(b64.get(x[0])<<6)` to grab the first 6 bits and move it 6 bits upward to leave the bottom 6 bits for the next byte*\
+*`b64.get(x[1])` to grab the second 6 bits, `|` adds these 6 bits chunks together, stitching into 12 bits)*\
+*Now, since we know the flag is probably appended behind the original word, and is 4 bits long, we do `& 0b1111` to grab the last 4 bits out*\
+*Finally, we return the extracted flag bits as hex (not as binary to reduce the length when printing it out later)*
+
+```py
 >>> inp = "YU== Ye== YU== Ye== YV== YT== YX== Yb== YX== YT== YX== YU== YW== Yf== YX== YQ== YV== Yf== YW== YT== YT== YU== YW== Yc== YW== Yc== YT== YR== YW== Ye== YW== YX== YV== Yf== YW== Yd== YT== YT== YV== Yf== YW== YT== YW== Yc== YT== YU== YW== Ye== YW== Yb== YT== YT== YX== YS== YV== Yf== YT== YT== YT== YS== YT== YS== YW== YV== YW== YS== YW== YS== YT== YS== YW== YT== YW== YT== YW== YU== YW== YT== YT== YW== YX== Yd== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y=== Y==="
 >>> 
 >>> out = ""
