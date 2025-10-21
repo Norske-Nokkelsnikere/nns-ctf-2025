@@ -1,0 +1,23 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: car-park
+  namespace: berg
+spec:
+  categories:
+    - misc
+    - osint
+  difficulty: easy
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  displayName: Car Park
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{988418536}
+  flagFormat: NNS{...}
+  description: |
+    I parked my car, but I have forgotten where. Can you help me find it?
+    The flag is the norwegian organisation number of the company whose car park this is. The flag matches NNS\{\d{9}\} 
+  containers: []
+  attachments:
+    - fileName: car-park.tar.gz
+      downloadUrl: "${handouts}/car-park.tar.gz"

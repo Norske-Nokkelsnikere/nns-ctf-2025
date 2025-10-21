@@ -1,0 +1,8 @@
+services:
+  notes:
+    build: .
+    platform: linux/amd64
+    ports:
+      - "1337:1337"
+    environment:
+      - FLAG

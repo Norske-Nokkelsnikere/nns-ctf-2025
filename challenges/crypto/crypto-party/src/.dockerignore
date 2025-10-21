@@ -1,0 +1,4 @@
+.dockerignore
+.venv
+compose.yml
+Dockerfile

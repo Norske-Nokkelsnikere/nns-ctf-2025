@@ -1,0 +1,21 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: mandatory
+  namespace: berg
+spec:
+  categories:
+    - beginner
+    - rev
+  difficulty: easy
+  author: hoover
+  displayName: mandatory
+  allowOutboundTraffic: false
+  flag: NNS{w0w_1_l0v3_r3v3rs1ng}
+  flagFormat: NNS{...}
+  description: |
+    Sometimes the most straightforward approach is the best approach. This simple flag checker hides its secret. Can you reverse engineer the binary to extract the flag?
+  containers: []
+  attachments:
+    - fileName: mandatory.tar.gz
+      downloadUrl: "${handouts}/mandatory.tar.gz"

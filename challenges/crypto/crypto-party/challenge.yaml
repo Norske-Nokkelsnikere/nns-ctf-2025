@@ -1,0 +1,38 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: crypto-party
+  namespace: berg
+spec:
+  categories:
+    - crypto
+  difficulty: easy
+  author: Zukane
+  displayName: Crypto Party
+  allowOutboundTraffic: false
+  flag: NNS{cr4nk_up_th3_bi4s5_y0}
+  flagFormat: NNS{...}
+  description: |
+    Get invites to the Crypto party for you and your friends before the guest list fills up!
+  containers:
+    - hostname: challenge
+      image: ${registry}:crypto-crypto-party
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      readinessProbe:
+        tcpSocket:
+          port: 1337
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: crypto-party.tar.gz
+      downloadUrl: "${handouts}/crypto-party.tar.gz"

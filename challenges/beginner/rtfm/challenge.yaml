@@ -1,0 +1,39 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: rtfm
+  namespace: berg
+spec:
+  categories:
+    - beginner
+    - web
+  difficulty: easy
+  author: piprett
+  allowOutboundTraffic: false
+  flag: NNS{did_you_read_the_fricking_manuals}
+  flagFormat: NNS{...}
+  description: |
+    I am a frontend 'developer', and recently I made a very secure flag storing app. Can you hack it?
+  containers:
+    - hostname: app
+      image: ${registry}:beginner-rtfm
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 3000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: rtfm.tar.gz
+      downloadUrl: "${handouts}/rtfm.tar.gz"

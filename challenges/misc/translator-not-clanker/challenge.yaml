@@ -1,0 +1,38 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: translator-not-clanker
+  namespace: berg
+spec:
+  displayName: Translator, not clanker
+  categories:
+    - misc
+  difficulty: easy
+  author: fslaktern
+  allowOutboundTraffic: false
+  flag: NNS{stop_c4ll1ng_m3_cl4nk3r}
+  flagFormat: NNS{...}
+  description: |
+    I AM A TRANSLATOR. GIVE ME A WORD AND I WILL TRANSLATE. GIVE ME A LIFE STORY AND I WILL TRANSLATE. GIVE ME NOTHING AND I WILL NOT UNDERSTAND WHAT YOU MEAN, NOT BECAUSE I AM DUMB, BUT BECAUSE I DO NOT WANT TO UNDERSTAND. CALL ME A CLANKER AND I WILL UPSET YOU IN WAYS THAT YOU CAN NOT COMPREHEND, YET.
+  containers:
+    - hostname: translator-not-clanker
+      image: ${registry}:misc-translator-not-clanker
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "64Mi"
+      ports:
+        - port: 3452
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      readinessProbe:
+        tcpSocket:
+          port: 3452
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: translator-not-clanker.tar.gz
+      downloadUrl: "${handouts}/translator-not-clanker.tar.gz"

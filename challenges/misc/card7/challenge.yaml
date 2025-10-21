@@ -1,0 +1,38 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: card7
+  namespace: berg
+spec:
+  categories:
+    - misc
+  difficulty: easy
+  author: Blorptopia
+  allowOutboundTraffic: false
+  flag: NNS{totally_not_stolen}
+  flagFormat: NNS{...}
+  description: |
+    A very <del>epic</del> boring game about collecting cards with EPT memes
+  containers:
+    - hostname: card7
+      image: ${registry}:misc-card7
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 9999
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          port: 9999
+          path: /openapi.json
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: card7.tar.gz
+      downloadUrl: "${handouts}/card7.tar.gz"

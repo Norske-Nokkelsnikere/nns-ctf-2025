@@ -1,0 +1,12 @@
+services:
+  spy:
+    build: challenge
+    image: spy:latest
+    container_name: spy
+    environment:
+      PORT: "1337"
+      RPC_URL: "http://127.0.0.1:8545"
+      FLAG: "NNS{fake_flag}"
+      ANVIL_IP_ADDR: "0.0.0.0"
+    ports:
+      - "8000:8000"

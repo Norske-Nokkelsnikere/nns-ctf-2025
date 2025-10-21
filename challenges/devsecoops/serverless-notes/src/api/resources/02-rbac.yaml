@@ -1,0 +1,116 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: notes-guest
+rules:
+  - verbs: [ "create", "watch", "get" ]
+    apiGroups: [ "nnsctf.no" ]
+    resources: [ "notes" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: notes-guest-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: notes-guest
+subjects:
+  - kind: User
+    apiGroup: rbac.authorization.k8s.io
+    name: system:anonymous
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: devsecoops-intern
+rules:
+  - verbs: [ "impersonate" ]
+    apiGroups: [ "" ]
+    resources: [ "serviceaccounts" ]
+    resourceNames: [ "devsecoops-auditor" ]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: devsecoops-intern
+  namespace: devsecoops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: devsecoops-intern-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: devsecoops-intern
+subjects:
+  - kind: ServiceAccount
+    name: devsecoops-intern
+    namespace: devsecoops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: devsecoops-auditor
+  namespace: devsecoops
+rules:
+  - verbs: [ "list" ]
+    apiGroups: [ "events.k8s.io" ]
+    resources: [ "events" ]
+  - verbs: [ "get" ]
+    apiGroups: [ "" ]
+    resources: [ "pods" ]
+  - verbs: [ "create", "get" ]
+    apiGroups: [ "" ]
+    resources: [ "secrets" ]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: devsecoops-auditor
+  namespace: devsecoops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: devsecoops-auditor-binding
+  namespace: devsecoops
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: devsecoops-auditor
+subjects:
+  - kind: ServiceAccount
+    name: devsecoops-auditor
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: scrum-daddy-2604d58b82f3a6cb
+rules:
+  - verbs: [ "create" ]
+    apiGroups: [ "rbac.authorization.k8s.io" ]
+    resources: [ "clusterrolebindings" ]
+  - verbs: [ "create", "bind", "escalate" ]
+    apiGroups: [ "rbac.authorization.k8s.io" ]
+    resources: [ "clusterroles" ]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: scrum-daddy-2604d58b82f3a6cb
+  namespace: devsecoops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: scrum-daddy-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: scrum-daddy-2604d58b82f3a6cb
+subjects:
+  - kind: ServiceAccount
+    name: scrum-daddy-2604d58b82f3a6cb
+    namespace: devsecoops

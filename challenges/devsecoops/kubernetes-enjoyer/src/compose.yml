@@ -1,0 +1,9 @@
+services:
+  challenge:
+    build: challenge
+    restart: always
+  wetty:
+    build: wetty
+    restart: always
+    ports:
+      - "1337:3000"

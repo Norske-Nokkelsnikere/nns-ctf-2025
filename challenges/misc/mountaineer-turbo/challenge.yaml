@@ -1,0 +1,23 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: mountaineer-turbo
+  namespace: berg
+spec:
+  categories:
+    - misc
+    - osint
+  difficulty: easy
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  displayName: Mountaineer Turbo
+  author: fantomet
+  allowOutboundTraffic: false
+  flag: NNS{ausserferrera}
+  flagFormat: NNS{...}
+  description: |
+    I'm standing on top of this river next to a small town about 300m away, the mountain I'm looking at is 3060m tall and is approximately 3700m away, can you find out which town im next to? 
+    Flag: NNS{name_of_town}
+  containers: []
+  attachments:
+    - fileName: mountaineer-turbo.tar.gz
+      downloadUrl: "${handouts}/mountaineer-turbo.tar.gz"

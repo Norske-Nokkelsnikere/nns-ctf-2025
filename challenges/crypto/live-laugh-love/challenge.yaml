@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: live-laugh-love
+  namespace: berg
+spec:
+  categories:
+    - crypto
+  difficulty: easy
+  author: Zukane
+  displayName: Live Laugh Love
+  allowOutboundTraffic: false
+  flag: NNS{LLL_IV_e_l4ugh_l0v3}
+  flagFormat: NNS{...}
+  description: |
+    Multiple unknowns and only a single equation... You are doomed!
+  containers: []
+  attachments:
+    - fileName: live-laugh-love.tar.gz
+      downloadUrl: "${handouts}/live-laugh-love.tar.gz"

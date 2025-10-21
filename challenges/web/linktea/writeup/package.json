@@ -1,0 +1,13 @@
+{
+  "name": "solver",
+  "module": "index.ts",
+  "type": "module",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

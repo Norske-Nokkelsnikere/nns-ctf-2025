@@ -1,0 +1,13 @@
+{
+  "name": "nnsctf25-web-man",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "@types/bun": "1.2.20"
+  },
+  "peerDependencies": {
+    "typescript": "5.9.2"
+  }
+}

@@ -1,0 +1,19 @@
+[project]
+name = "parcellocker"
+version = "1.0.0"
+description = "Parcellocker backend API server"
+authors = [
+    { name = "fslaktern" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi[standard]",
+    "pycryptodome"
+]
+
+[project.scripts]
+api = "src.parcellocker.main:main"
+
+[build-system]
+requires = ["uv_build>=0.8.5,<0.9.0"]
+build-backend = "uv_build"

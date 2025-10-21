@@ -1,0 +1,9 @@
+services:
+  card7:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9999:9999"
+    environment:
+      FLAG: flag-only-available-in-production

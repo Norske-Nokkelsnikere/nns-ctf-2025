@@ -1,0 +1,34 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: grinch
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: true
+  flag: NNS{EIP_7702_spec_auth0r1z4t10n_l1st_1s_z3r0_1s_funny_w1th_wr0ng_1mpl3m3nt4t10n_1n_4nv1l}
+  flagFormat: NNS{...}
+  description: |
+    It's christmas day, but I think you would like to crash the party
+  containers:
+    - hostname: grinch
+      image: ${registry}:blockchain-grinch
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "256Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+  attachments:
+    - fileName: grinch.tar.gz
+      downloadUrl: "${handouts}/grinch.tar.gz"
+
+      

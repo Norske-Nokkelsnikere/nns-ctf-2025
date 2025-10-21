@@ -1,0 +1,33 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: collatz
+  namespace: berg
+spec:
+  displayName: Collatz
+  categories:
+    - misc
+  difficulty: easy
+  author: roedal
+  allowOutboundTraffic: false
+  flag: NNS{3x_f4l50_qu0dlib3t}
+  flagFormat: NNS{...}
+  description: |
+    Can you solve the Collatz Conjecture?
+  containers:
+    - hostname: collatz
+      image: ${registry}:misc-collatz
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      dynamicFlag:
+        env:
+          name: FLAG
+  attachments:
+    - fileName: collatz.tar.gz
+      downloadUrl: "${handouts}/collatz.tar.gz"

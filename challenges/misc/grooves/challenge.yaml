@@ -1,0 +1,32 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: grooves
+  namespace: berg
+spec:
+  categories:
+    - misc
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{jvm_s4ndb0xing_1s_h4rd_mvm}
+  flagFormat: NNS{...}
+  description: |
+    I love grooving, do you? Send me some of your best grooves!<br><br>Please solve the challenge locally before starting an instance!
+  containers:
+    - hostname: grooves
+      image: ${registry}:misc-grooves
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      dynamicFlag:
+        content:
+          path: /usr/share/app/flag.txt
+  attachments:
+    - fileName: grooves.tar.gz
+      downloadUrl: "${handouts}/grooves.tar.gz"

@@ -1,0 +1,22 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: dotdotdot
+  namespace: berg
+spec:
+  displayName: DotDotDot
+  categories:
+    - beginner
+    - rev
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{d0tn3t_1s_e4s1ly_dec0mp1l3d_t0_s0urc3_c0de}
+  flagFormat: NNS{...}
+  description: |
+    .NET is compiled into so-called Common Language, which is interpreted by a virtual machine. This means that code can work on multiple platforms.
+    Additionally it is easy to recover readable code, for instance using dotPeek or ILSpy.
+  containers: []
+  attachments:
+    - fileName: dotdotdot.tar.gz
+      downloadUrl: "${handouts}/dotdotdot.tar.gz"

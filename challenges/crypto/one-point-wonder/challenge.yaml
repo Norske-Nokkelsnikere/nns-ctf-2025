@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: one-point-wonder
+  namespace: berg
+spec:
+  categories:
+    - crypto
+  difficulty: easy
+  author: Zukane
+  displayName: One Point Wonder
+  allowOutboundTraffic: false
+  flag: NNS{bu1lD_CuRv3_r3c0v3r_1s0g3ny_d3cRyp7_fl4g}
+  flagFormat: NNS{...}
+  description: |
+    oops, I left the codomain at home
+  containers: []
+  attachments:
+    - fileName: one-point-wonder.tar.gz
+      downloadUrl: "${handouts}/one-point-wonder.tar.gz"

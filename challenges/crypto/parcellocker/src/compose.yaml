@@ -1,0 +1,19 @@
+---
+services:
+    parcellocker_proxy:
+        build: proxy
+        container_name: parcellocker-proxy
+        ports:
+            - 7000:7000
+
+    parcellocker_api:
+        build: api
+        container_name: parcellocker-api
+        ports:
+            - 8000:8000
+
+    parcellocker_frontend:
+        build: frontend
+        container_name: parcellocker-frontend
+        ports:
+            - 3000:3000

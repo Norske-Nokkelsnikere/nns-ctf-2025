@@ -1,0 +1,37 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: noters
+  namespace: berg
+spec:
+  categories:
+    - pwn
+  difficulty: easy
+  author: fslaktern
+  allowOutboundTraffic: false
+  flag: NNS{y0u_d1dnT_n33d_uns4f3_t0_uns4f3}
+  flagFormat: NNS{...}
+  description: |
+    A blazingly-fast, memory-safe, CRUD-compatible note-taking app written in nearly 1000 lines of safe Rust. No unsafe and no memory errors, yet still a pwn challenge. Everything looks safe. Everything compiles. Even clippy is happy. But something still feels off, and it's not Rust's fault.
+  containers:
+    - hostname: noters
+      image: ${registry}:pwn-noters
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "64Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      readinessProbe:
+        tcpSocket:
+          port: 1337
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: noters.tar.gz
+      downloadUrl: "${handouts}/noters.tar.gz"

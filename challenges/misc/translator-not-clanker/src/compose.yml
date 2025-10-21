@@ -1,0 +1,8 @@
+services:
+  translator-not-clanker:
+    build:
+      context: .
+    ports:
+      - 3452:3452
+    environment:
+      FLAG: NNS{demo-flag}

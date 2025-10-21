@@ -1,0 +1,29 @@
+<!doctype html>
+<head>
+	<script type="module">
+		const formElement = document.getElementById("form");
+		form.addEventListener("submit", event => {
+			event.preventDefault();
+			const submitButton = document.getElementById("submit");
+			const keyElement = document.getElementById("key");
+			try {
+				submitButton.disabled = true;
+
+				const webSocket = new WebSocket("/flag");
+				webSocket.addEventListener("open", () => {
+					webSocket.send(keyElement.value);
+				});
+				webSocket.addEventListener("message", event => {
+					alert(event.data);
+				});
+			} finally {
+				submitButton.disabled = false;
+			}
+		});
+	</script>
+</head>
+<form id="form">
+	<label for="key">Key</label>
+	<input id="key" required>
+	<button id="submit" type="submit">Check</button>
+</form>

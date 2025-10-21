@@ -1,0 +1,49 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: serverless-notes
+  namespace: berg
+spec:
+  displayName: "Serverless™ Notes"
+  categories:
+    - devsecoops
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{Why_1mpl3m3nt_r3st_4p1_0r_s0m3th1ng_l1k3_th4t_wh3n_y0u_c4n_u5e_k8s}
+  flagFormat: NNS{...}
+  description: |
+    Seems like serverless is the new trend after "cloud transformation". Being serverless, I don't have to care about my backend at all! Maybe I should?
+  containers:
+    - hostname: api
+      image: ${registry}:devsecoops-serverless-notes-api
+      resourceLimits:
+        cpu: "0.4"
+        memory: "512Mi"
+      ports:
+        - port: 6443
+          protocol: tcp
+          appProtocol: tcp
+          type: internalPort
+      dynamicFlag:
+        env:
+          name: FLAG
+    - hostname: frontend
+      image: ${registry}:devsecoops-serverless-notes-frontend
+      environment: {}
+      resourceLimits:
+        cpu: "0.1"
+        memory: "128Mi"
+      ports:
+        - port: 8080
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /readyz
+          port: 8080
+        initialDelaySeconds: 0
+        periodSeconds: 1
+
+  attachments: []

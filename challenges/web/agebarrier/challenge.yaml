@@ -1,0 +1,38 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: agebarrier
+  namespace: berg
+spec:
+  categories:
+    - web
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{D4tes_4nd_t1m3z0n3s_ar3_h4rd}
+  flagFormat: NNS{...}
+  description: |
+    The youngsters are easily bypassing age verification systems nowadays, so I made my very own bleeding-edge and future-proof age verification system. Surely, it's impenetrable?
+  containers:
+    - hostname: agebarrier
+      image: ${registry}:web-agebarrier
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "220Mi"
+      ports:
+        - port: 8080
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8080
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: agebarrier.tar.gz
+      downloadUrl: "${handouts}/agebarrier.tar.gz"

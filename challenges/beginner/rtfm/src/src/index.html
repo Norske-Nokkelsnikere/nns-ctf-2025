@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RTFM</title>
+    <link rel="stylesheet" href="https://unpkg.com/7.css" />
+  </head>
+  <body>
+    <main style="display: flex; gap: 3vw">
+      <div class="window active" style="max-width: 300px">
+        <div class="title-bar">
+          <div class="title-bar-text">Login</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body has-space">
+          <form id="login-form">
+            <label for="login-username">Username</label>
+            <input type="text" name="login-username" id="login-username" />
+            <label for="login-password">Password</label>
+            <input type="text" name="login-password" id="login-password" />
+            <button type="submit">Login</button>
+          </form>
+          <div role="tooltip" id="login-out" style="display: none; margin-left: 6vw"></div>
+        </div>
+      </div>
+
+      <div class="window active" style="max-width: 300px">
+        <div class="title-bar">
+          <div class="title-bar-text">Register</div>
+          <div class="title-bar-controls">
+            <button aria-label="Minimize"></button>
+            <button aria-label="Maximize"></button>
+            <button aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="window-body has-space">
+          <form id="reg-form">
+            <label for="reg-username">Username</label>
+            <input type="text" name="reg-username" id="reg-username" />
+            <label for="reg-password">Password</label>
+            <input type="text" name="reg-password" id="reg-password" />
+            <button type="submit">Register</button>
+          </form>
+          <div role="tooltip" id="reg-out" style="display: none; margin-left: 6vw"></div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const loginOut = document.querySelector('#login-out');
+      const regOut = document.querySelector('#reg-out');
+
+      document.querySelector('#login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const res = await fetch('/login', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: document.querySelector('#login-username').value,
+            password: document.querySelector('#login-password').value,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (res.status === 204) {
+          loginOut.innerText = 'User has no flag';
+          loginOut.style.display = 'block';
+        } else if (res.status === 401) {
+          loginOut.innerText = 'Unauthorized';
+          loginOut.style.display = 'block';
+        } else if (res.status === 200) {
+          loginOut.innerText = await res.text();
+          loginOut.style.display = 'block';
+        }
+      });
+
+      document.querySelector('#reg-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const res = await fetch('/reg', {
+          method: 'PUT',
+          body: JSON.stringify({
+            username: document.querySelector('#reg-username').value,
+            password: document.querySelector('#reg-password').value,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (res.status === 400) {
+          regOut.innerText = 'Username taken';
+          regOut.style.display = 'block';
+        } else if (res.status === 200) {
+          regOut.innerText = 'OK';
+          regOut.style.display = 'block';
+        }
+      });
+    </script>
+  </body>
+</html>

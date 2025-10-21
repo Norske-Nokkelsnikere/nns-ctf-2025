@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: badlock
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+    - bytecode
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: false
+  flag: NNS{3v3ry_h4rD_c0d3d_l06ic_cH3cK_c0un75_wh3n_c0mp4r1n9_7h3_c4ll_d474}
+  flagFormat: NNS{...}
+  description: |
+    My friend claims this is the authentication contract used in a proxy system he's been working on. Although I couldn't get access to the source code, I did manage to find the bytecode. Honestly, what I found was concerning. It's clear that we don't even need the source code to justify our concerns. 
+  containers: []
+  attachments:
+    - fileName: badlock.tar.gz
+      downloadUrl: "${handouts}/badlock.tar.gz"

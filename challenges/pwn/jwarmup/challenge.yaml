@@ -1,0 +1,34 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: jwarmup
+  namespace: berg
+spec:
+  displayName: JWarmup
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  categories:
+    - pwn
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{s0me_p01nt3r_ar1thm3t1c_w1ll_d0_th3_j0b_f0r_n0w...}
+  flagFormat: NNS{...}
+  description: |
+    My application was written in a modern- and memory safe language known as Java. It contains my secret, can you read it?
+  containers:
+    - hostname: jwarmup
+      image: ${registry}:pwn-jwarmup
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.2"
+        memory: "64Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+  attachments:
+    - fileName: jwarmup.tar.gz
+      downloadUrl: "${handouts}/jwarmup.tar.gz"

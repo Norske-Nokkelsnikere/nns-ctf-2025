@@ -1,0 +1,10 @@
+- Sourceless, but notice the "cloud-native" hints, along with "nats" in the client js
+- Notice that arbitrary messages can be sent to arbitrary subjects
+- Notice that only the public channel can be read
+- Notice the hint of an admin channel's existence
+- Notice the hint of `reply-to`
+- Notice that `$JS.API` is blocked
+- Notice that `$SYS.REQ.USER.INFO` returns the JetStream domain
+- Notice that `$JS.{domain}.API` exists as an alias
+- Request a list of streams from `$JS.{domain}.API.STREAM.LIST`
+- Retrieve messages using `$JS.{domain}.API.STREAM.MSG.GET.{stream}`

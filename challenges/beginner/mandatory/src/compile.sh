@@ -1,0 +1,1 @@
+gcc -o mandatory chal.c

@@ -1,0 +1,34 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: kachow
+  namespace: berg
+spec:
+  displayName: Kachow
+  categories:
+    - pwn
+    - community
+  difficulty: easy
+  author: Kriz
+  allowOutboundTraffic: false
+  flag: NNS{1_7h0u67_l18c_func710n5_w3r3_s4f3_4641n57_r4c3_c0nd1710n5???}
+  flagFormat: NNS{...}
+  description: |
+    You might be fast, but are you faster than libc?
+  containers:
+    - hostname: grooves
+      image: ${registry}:community-kachow
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      dynamicFlag:
+        env:
+          name: FLAG
+  attachments:
+    - fileName: kachow.tar.gz
+      downloadUrl: "${handouts}/kachow.tar.gz"

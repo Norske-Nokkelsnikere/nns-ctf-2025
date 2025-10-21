@@ -1,0 +1,33 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: lmnop
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+    - huff
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: true
+  flag: NNS{i_l0v3_1t_wh3n_w3_d0nt_h4v3_4_ecrecover_ch3ck!!}
+  flagFormat: NNS{...}
+  description: |
+    Do you know your letters?
+  containers:
+    - hostname: lmnop
+      image: ${registry}:blockchain-lmnop
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "256Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+  attachments:
+    - fileName: lmnop.tar.gz
+      downloadUrl: "${handouts}/lmnop.tar.gz"

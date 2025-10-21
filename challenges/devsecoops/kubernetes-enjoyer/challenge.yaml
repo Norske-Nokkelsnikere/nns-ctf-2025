@@ -1,0 +1,49 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: kubernetes-enjoyer
+  namespace: berg
+spec:
+  displayName: Kubernetes enjoyer
+  categories:
+    - devsecoops
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{Why_Z3r0_Tru5t_Wh3N_y0U_c4N_Tru5t_3v3ry0ne?}
+  flagFormat: NNS{...}
+  description: |
+    The platform team once told me during standup that "sudo fixes everything". My life has never been better ever since.
+  containers:
+    - hostname: challenge
+      image: ${registry}:devsecoops-kubernetes-enjoyer-challenge
+      resourceLimits:
+        cpu: "0.1"
+        memory: "128Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: internalPort
+      dynamicFlag:
+        executable:
+          path: /root/secretdirectorydonttouch/flag
+          mode: 0o100
+    - hostname: wetty
+      image: ${registry}:devsecoops-kubernetes-enjoyer-wetty
+      environment: {}
+      resourceLimits:
+        cpu: "0.5"
+        memory: "220Mi"
+      ports:
+        - port: 3000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments: []

@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: breaker
+  namespace: berg
+spec:
+  categories:
+    - beginner
+    - rev
+  difficulty: easy
+  author: fantomet
+  allowOutboundTraffic: false
+  flag: NNS{moves_like_jagger_but_rev}
+  flagFormat: NNS{...}
+  description: |
+    Did you know that "breaking" a program can mean more than one thing? GDB certainly has its own idea of what that means. Unfortunately, a cat ran across my keyboard in the middle of debugging, and now everything looks like nonsense. Can you make sense of the chaos and recover the flag?
+  containers: []
+  attachments:
+    - fileName: breaker.tar.gz
+      downloadUrl: "${handouts}/breaker.tar.gz"

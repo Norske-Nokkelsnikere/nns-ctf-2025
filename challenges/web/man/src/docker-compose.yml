@@ -1,0 +1,9 @@
+services:
+  man:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: man
+    ports:
+      - 3000:3000

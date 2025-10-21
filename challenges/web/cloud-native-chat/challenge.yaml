@@ -1,0 +1,50 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: cloud-native-chat
+  namespace: berg
+spec:
+  displayName: Cloud-native Chat
+  categories:
+    - web
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: NNS{cl0ud_n4t1v3_m3ss4g1ng_1s_c00l_but_s3cur3_y0ur_subj3ct5}
+  flagFormat: NNS{...}
+  description: |
+    If you like cloud-native architecture, then you'll LOVE this messaging app! Say hi to the cloud-native solution to real-time messaging for you and your friends! Being cloud-native and all, security and zero-trust comes first, right?
+  containers:
+    - hostname: app
+      image: ${registry}:web-cloud-native-chat-app
+      environment:
+        NATS_URL: "nats://nats:4222"
+      resourceLimits:
+        cpu: "0.5"
+        memory: "220Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      dynamicFlag:
+        env:
+          name: FLAG
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+    - hostname: nats
+      image: ${registry}:web-cloud-native-chat-nats
+      environment: {}
+      resourceLimits:
+        cpu: "0.5"
+        memory: "220Mi"
+      ports:
+        - port: 4222
+          protocol: tcp
+          appProtocol: tcp
+          type: internalPort
+  attachments: []

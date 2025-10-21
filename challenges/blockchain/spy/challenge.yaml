@@ -1,0 +1,30 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: spy
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: true
+  flag: NNS{1_l0v3_ots_getContractCreator_n0w_l3t5_g3t_th15_p4rty_5t4rt3d}
+  flagFormat: NNS{...}
+  description: |
+    I belive someone accidentally leaked some very sensitive data and deleted it straight away. Let's remind them of one of the blockchain's core principles, everything is immutable 🕵️
+  containers:
+    - hostname: spy
+      image: ${registry}:blockchain-spy
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "256Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+  attachments: []  

@@ -1,0 +1,23 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: ultra-low-power-flag-checker
+  namespace: berg
+spec:
+  displayName: Ultra low power flag checker
+  categories:
+    - misc
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{r3memb3r_t0_h1de_y0ur_p0w3r_u54ag3}
+  flagFormat: NNS{...}
+  description: |
+    I made this embedded flag checker. I even verified that it is ultra low power.
+  containers: []
+  attachments:
+    - fileName: ultra-low-power-flag-checker.tar.gz
+      downloadUrl: "${handouts}/ultra-low-power-flag-checker.tar.gz"
+    # Manually uploaded since it's large
+    - fileName: ultra-low-power-flag-checker-measurements.7z
+      downloadUrl: "${handouts}/ultra-low-power-flag-checker-measurements.7z"

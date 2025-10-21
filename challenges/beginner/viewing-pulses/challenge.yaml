@@ -1,0 +1,22 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: viewing-pulses
+  namespace: berg
+spec:
+  displayName: Viewing Pulses
+  categories:
+    - beginner
+    - misc    
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{an4lys1ng_pu1s35_t0_dec0d3_f1ag5}
+  flagFormat: NNS{...}
+  description: |
+    Logic analysis is a fundamental technique of hardware reverse engineering.
+    The attached recording is of a UART signal. It is taken in PulseView, a program that allows logic recording and protocol decoding.
+  containers: []
+  attachments:
+    - fileName: viewing-pulses.tar.gz
+      downloadUrl: "${handouts}/viewing-pulses.tar.gz"

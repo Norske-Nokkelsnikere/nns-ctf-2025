@@ -1,0 +1,11 @@
+---
+services:
+  noters:
+    build: .
+    image: noters_app:latest
+    container_name: noters
+    restart: unless-stopped
+    environment:
+      FLAG: "NNS{placeholder_flag}"
+    ports:
+      - "31337:1337"

@@ -1,0 +1,33 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: huffameg
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+    - huff
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: true
+  flag: NNS{huff_4_m3g_1_th0ugh_evm_funct10n_s1gn4tur3s_w3r3_s3cur3!!}
+  flagFormat: NNS{...}
+  description: |
+    I don't understand, this just needs to return true! Hey Alexa, play "Tante Sofies sinte vise" until we've solved this challenge...
+  containers:
+    - hostname: huffameg
+      image: ${registry}:blockchain-huffameg
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "256Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+  attachments:
+    - fileName: huffameg.tar.gz
+      downloadUrl: "${handouts}/huffameg.tar.gz"

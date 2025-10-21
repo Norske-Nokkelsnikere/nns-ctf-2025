@@ -1,0 +1,3 @@
+# badlock
+
+just use chatgpt

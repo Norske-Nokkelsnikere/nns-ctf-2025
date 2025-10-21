@@ -1,0 +1,6 @@
+# dependencies (bun install)
+node_modules
+
+# prisma generated
+generated
+*.db

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <title>Astchoo</title>
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector("form").onsubmit = async (event) => {
+                event.preventDefault();
+                let r = await fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        code: document.getElementById("code").value
+                    })
+                });
+                if (!r.ok) {
+                    alert(await r.text());
+                } else {
+                    let data = await r.json();
+                    document.getElementById("output").innerText = data.output;
+                }
+            }
+            // https://stackoverflow.com/a/6637396
+            document.getElementById('code').addEventListener('keydown', function(e) {
+                if (e.key == 'Tab') {
+                    e.preventDefault();
+                    var start = this.selectionStart;
+                    var end = this.selectionEnd;
+
+                    // set textarea value to: text before caret + tab + text after caret
+                    this.value = this.value.substring(0, start) +
+                    "\t" + this.value.substring(end);
+
+                    // put caret at right position again
+                    this.selectionStart =
+                    this.selectionEnd = start + 1;
+                }
+            });
+        })
+    </script>
+</head>
+<body>
+    <h1>Astchoo - The smart calculator</h1>
+    <form>
+        <label for="code">Code</label>
+        <br/>
+        <textarea id="code"></textarea>
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
+    <label for="output">Output</label>
+    <br/>
+    <span id="output"></span>
+</body>

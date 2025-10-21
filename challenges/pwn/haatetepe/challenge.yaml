@@ -1,0 +1,40 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: haatetepe
+  namespace: berg
+spec:
+  categories:
+    - pwn
+  difficulty: easy
+  author: fslaktern
+  allowOutboundTraffic: false
+  flag: NNS{wh4t_d0_y0u_m34n_my_53rv3r_15n7_s3cur3?_4nd_n0_1_w0n7_u53_Rust}
+  flagFormat: NNS{...}
+  description: |
+     The best haatetepe server in Norway comes with speed, small size and modular routing. I've disabled the /flag route for now, though. Check out the server and let me know what you think! I haven't done any benchmarks, but I bet it's faster than NGINX, and it uses less than 1MB memory!
+
+     It's in its (very) early stages, but I'm planning on implementing the rest of the HTTP header specification when I get time. Thanks for stopping by!
+  containers:
+    - hostname: haatetepe
+      image: ${registry}:pwn-haatetepe
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.1"
+        memory: "16Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: haatetepe.tar.gz
+      downloadUrl: "${handouts}/haatetepe.tar.gz"

@@ -1,0 +1,64 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: parcellocker
+  namespace: berg
+spec:
+  displayName: "ParcelLocker"
+  categories:
+    - crypto
+  difficulty: easy
+  author: fslaktern
+  allowOutboundTraffic: false
+  flag: NNS{th4nkfully_th15_w0uldn7_h4pp3n_1n_r34l_l1f3_r1gh7?_r1gh7?}
+  flagFormat: NNS{...}
+  description: |
+    These new parcel lockers promise convenience: no queues, no staff, and 24/7 access. Everything is managed through a web UI, complete with API documentation at `/api/docs`. Your task as a user is simple: open the app, claim your parcel, and the assigned locker slot will unlock.
+
+    However, rumours are spreading - someone has already found a way to open any slot in any locker. Can you do it too?
+
+  containers:
+    - hostname: proxy
+      image: ${registry}:crypto-parcellocker-proxy
+      resourceLimits:
+        cpu: "0.1"
+        memory: "16Mi"
+      ports:
+        - port: 7000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /api/my_parcel
+          port: 7000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+
+    - hostname: api
+      image: ${registry}:crypto-parcellocker-api
+      resourceLimits:
+        cpu: "0.1"
+        memory: "128Mi"
+      dynamicFlag:
+        env:
+          name: FLAG
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: internalPort
+
+    - hostname: frontend
+      image: ${registry}:crypto-parcellocker-frontend
+      environment: {}
+      resourceLimits:
+        cpu: "0.1"
+        memory: "64Mi"
+      ports:
+        - port: 3000
+          protocol: tcp
+          appProtocol: http
+          type: internalPort
+
+  attachments: []

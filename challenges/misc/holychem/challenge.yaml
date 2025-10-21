@@ -1,0 +1,19 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: holychem
+  namespace: berg
+spec:
+  categories:
+    - misc
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: false
+  flag: NNS{wtf_1s_th1s_4nc0d1ng_m3th0d??__us1ng_str41ght_ch41n_4l4n43?!!}
+  flagFormat: NNS{...}
+  description: |
+    A chemist seems to be passing secret notes during an exam... but their messages are encoded in a strange cipher I've never seen before! Can you analyze the traffic, decipher their scheme, and make sense of it? (I'd like the answer to his question too...)
+  containers: []
+  attachments:
+    - fileName: holychem.tar.gz
+      downloadUrl: "${handouts}/holychem.tar.gz"

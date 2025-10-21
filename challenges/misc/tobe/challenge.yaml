@@ -1,0 +1,39 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: tobe
+  namespace: berg
+spec:
+  categories:
+    - misc
+  difficulty: easy
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  author: Blorptopia
+  allowOutboundTraffic: false
+  flag: NNS{w0nky-c4ch1ng-ru1es}
+  flagFormat: NNS{...}
+  description: |
+    Tobe is a vault for storing the flag, only those with a valid key may get the flag.
+    To increase security the key is stored absolutely nowhere :)
+  containers:
+    - hostname: tobe
+      image: ${registry}:misc-tobe
+      environment:
+        FLAG: NNS{w0nky-c4ch1ng-ru1es}
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 9999
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          port: 9999
+          path: /openapi.json
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: tobe.tar.gz
+      downloadUrl: "${handouts}/tobe.tar.gz"

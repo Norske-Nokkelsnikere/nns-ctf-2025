@@ -1,0 +1,27 @@
+[package]
+name = "noters"
+description = "Blazingly fast, 100% memory-safe, CRUD-compliant, cross platform and private note-taking app"
+license = "WTFPL"
+keywords = ["noters", "notes", "cli", "hexagonal", "ctf"]
+categories = ["notes", "cli", "hexagonal", "ctf"]
+repository = "https://github.com/Norske-Nokkelsnikere/ctf-v1/tree/main/challenges/pwn/noters"
+version = "0.1.0"
+edition = "2024"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "debuginfo"
+debug = false
+
+[dependencies]
+anyhow = "1.0.98"
+clap = { version = "4.5.41", features = ["derive"] }
+colored = "3.0.0"
+dotenv = "0.15.0"
+env_logger = "0.11.8"
+log = "0.4.27"
+rusqlite = { version = "0.37.0", features = ["bundled"] }
+tabled = "0.20.0"
+thiserror = "2.0.12"

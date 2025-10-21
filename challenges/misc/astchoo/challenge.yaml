@@ -1,0 +1,38 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: astchoo
+  namespace: berg
+spec:
+  categories:
+    - misc
+  difficulty: easy
+  author: Blorptopia
+  allowOutboundTraffic: false
+  flag: NNS{pyr1ght5_numb3r_1_3n3my}
+  flagFormat: NNS{...}
+  description: |
+    Astchoo is a pretty nice Python-based calculator. Remember to print your results :)
+  containers:
+    - hostname: astchoo
+      image: ${registry}:misc-astchoo
+      dynamicFlag:
+        content:
+          path: /app/flag.txt
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 9999
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 9999
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: astchoo.tar.gz
+      downloadUrl: "${handouts}/astchoo.tar.gz"

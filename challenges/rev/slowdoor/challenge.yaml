@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: slowdoor
+  namespace: berg
+spec:
+  categories:
+    - rev
+  difficulty: easy
+  author: Zukane
+  displayName: slowdoor
+  allowOutboundTraffic: false
+  flag: NNS{Fl4g0n4cc1_s3qu3nc3}
+  flagFormat: NNS{...}
+  description: |
+    I'll print you the flag, sometime, maybe, eventually
+  containers: []
+  attachments:
+    - fileName: slowdoor.tar.gz
+      downloadUrl: "${handouts}/slowdoor.tar.gz"

@@ -1,0 +1,16 @@
+{
+  "name": "nnsctf25-web-hacker",
+  "module": "src/index.ts",
+  "type": "module",
+  "license": "MPL-2.0",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "1.2.20"
+  },
+  "peerDependencies": {
+    "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "puppeteer": "24.16.2"
+  }
+}

@@ -1,0 +1,74 @@
+#define function solve() view returns (bool)
+#define function owner() view returns (address)
+
+#define event solved(bytes32 input_hash, bytes32 solve_sig)
+
+#define constant SOLVE_SIG = 0x890d6908868e8ac13668278509dae455f142386153e7f121792f67b11b40f04b
+
+#define constant OWNER = FREE_STORAGE_POINTER()
+
+#define macro CONSTRUCTOR() = takes (0) returns (0) {
+    caller
+    [OWNER] sstore
+}
+
+#define macro emitSolved(input_hash, solve_sig) = takes (2) returns (0) {
+    __EVENT_HASH(solved)
+    0x00 0x00
+    log4
+}
+
+#define macro ONLY_OWNER() = takes (0) returns (0) {
+    caller
+    [OWNER] sload
+    eq
+    is_owner jumpi
+
+    0x00 0x00 revert
+
+    is_owner:
+}
+
+
+#define macro SOLVE() = takes (1) returns (1) {
+    ONLY_OWNER()
+    
+    dup1
+    [SOLVE_SIG]
+    eq
+    iszero               // oh wait
+    success jumpi
+    
+    0x00 0x00 revert
+    
+    success:
+        [SOLVE_SIG]
+        swap1
+        
+        emitSolved()
+        
+        0x01
+}
+
+#define macro GET_OWNER() = takes (0) returns (0) {
+    [OWNER] sload
+    0x00 mstore
+    0x20 0x00 return
+}
+
+#define macro MAIN() = takes (0) returns (0) {
+    0x00 calldataload 0xE0 shr
+    dup1 __FUNC_SIG(solve) eq solve jumpi
+    dup1 __FUNC_SIG(owner) eq get_owner jumpi
+
+    0x00 0x00 revert
+
+    solve:
+        0x04 calldataload
+        SOLVE()
+        0x00 mstore
+        0x20 0x00 return
+
+    get_owner:
+        GET_OWNER()
+}

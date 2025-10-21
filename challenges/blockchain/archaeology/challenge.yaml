@@ -1,0 +1,21 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: archaeology
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+    - cairo
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: false
+  flag: NNS{th4t_f3lt_g00d_1_l0v3_r34d1ng_s13rr4_4nd_3xtr4ct1ng_fl4g5}
+  flagFormat: NNS{...}
+  description: |
+    Welcome to Cairo, Egypt, where you have been paired with Giovanni Belzoni to hunt for a secret artifact. Can you unearth the remains?
+  containers: []
+  attachments:
+    - fileName: archaeology.tar.gz
+      downloadUrl: "${handouts}/archaeology.tar.gz"
+

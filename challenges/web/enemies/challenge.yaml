@@ -1,0 +1,70 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: enemies
+  namespace: berg
+spec:
+  categories:
+    - web
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  difficulty: medium
+  author: Blorptopia & Platinumaniac
+  allowOutboundTraffic: true
+  flag: NNS{s3r1ou5ly-y0u-ar3-aut0-upd4t1ng-n0w?}
+  flagFormat: NNS{...}
+  description: |
+    Experience the next level of software for sharing memes and bad code with your colleauges!
+    
+    
+    As we noticed the IT department wasn't having so much fun, so we added a custom widget that anyone can send that flashes the flag on the screen of the admin, sort of like a jumpscare but for credentials.
+    Don't worry - only the admins can see it.
+  containers:
+    - hostname: frontend
+      image: ${registry}:web-enemies-frontend
+      resourceLimits:
+        cpu: "0.4"
+        memory: "15Mi"
+      ports:
+        - port: 80
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 1
+    - hostname: backend
+      image: ${registry}:web-enemies-backend
+      resourceLimits:
+        cpu: "0.4"
+        memory: "50Mi"
+      dynamicFlag:
+        env:
+          name: FLAG
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: internalPort
+      readinessProbe:
+        httpGet:
+          path: /openapi.json
+          port: 8000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+    - hostname: admin-bot 
+      image: ${registry}:web-enemies-admin-bot
+      environment:
+        UI_URL: http://frontend
+        API_URL: http://backend:8000
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.4"
+        memory: "700Mi"
+  attachments:
+    - fileName: enemies.tar.gz
+      downloadUrl: "${handouts}/enemies.tar.gz"

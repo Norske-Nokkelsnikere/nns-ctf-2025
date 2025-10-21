@@ -1,0 +1,9 @@
+name: "cloud-native-chat-dev"
+
+services:
+  nats:
+    build:
+      context: nats
+    restart: always
+    ports:
+      - "127.0.0.1:4222:4222"

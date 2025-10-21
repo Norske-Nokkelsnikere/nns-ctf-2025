@@ -1,0 +1,34 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: the-infamous-notes-app
+  namespace: berg
+spec:
+  displayName: The infamous notes app
+  categories:
+    - pwn
+    - community
+  difficulty: easy
+  author: Kriz
+  allowOutboundTraffic: false
+  flag: NNS{4ll_y0u_n33d_15_4n_0ff_by_0n3!}
+  flagFormat: NNS{...}
+  description: |
+    You may have seen a notes app before, but this one is 100% memory safe:)
+  containers:
+    - hostname: grooves
+      image: ${registry}:community-the-infamous-notes-app
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      dynamicFlag:
+        content:
+          path: /home/ctf/flag.txt
+  attachments:
+    - fileName: the-infamous-notes-app.tar.gz
+      downloadUrl: "${handouts}/the-infamous-notes-app.tar.gz"

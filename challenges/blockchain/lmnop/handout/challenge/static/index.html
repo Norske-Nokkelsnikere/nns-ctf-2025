@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>lmnop</title>
+  <!-- NES.css CDN -->
+  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+  <link href="https://nostalgic-css.github.io/NES.css/style.css" rel="stylesheet" />
+  <!-- NES font (Press Start 2P) -->
+  <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+  <!-- Confetti.js -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --second-color: #20eea9;
+    }
+    
+    html, body {
+      height: 100%;
+      background: #212529;
+      margin: 0;
+      padding: 0;
+      font-family: "Press Start 2P", Arial, monospace;
+      color: #212529;
+    }
+    *, *:before, *:after {
+      cursor: default !important;
+    }
+    input, textarea {
+      cursor: text !important;
+    }
+    button, a, [onclick] {
+      cursor: pointer !important;
+    }
+    .nes-header {
+      background: #212529;
+      width: 100%;
+      border-bottom: 4px solid #fff;
+      margin-bottom: 2rem;
+    }
+    .nes-header .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .nes-header .brand {
+      display: flex;
+      align-items: center;
+    }
+    .nes-header .brand-logo {
+      font-size: 2.3em;
+      margin-right: 1rem;
+      color: var(--second-color);
+    }
+    .nes-header .brand-name {
+      font-size: 2rem;
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-shadow: none;
+      margin: 0;
+      font-family: "Press Start 2P", "Arial", monospace;
+    }
+    .nes-header .subtitle {
+      color: #61646b;
+      margin-left: 0.6em;
+      font-size: 1rem;
+      font-family: "Press Start 2P", "Arial", monospace;
+    }
+    .nes-main-container {
+      max-width: 1100px;
+      margin: auto;
+      background: #212529;
+      padding: 0 1.5rem 2rem 1.5rem;
+    }
+    .ctf-title {
+      margin-top: 0.3em;
+      margin-bottom: 1.7em;
+      font-size: 2rem;
+      font-family: "Press Start 2P", monospace;
+      letter-spacing: 2px;
+      color: #212529;
+      border-bottom: 3px solid #212529;
+      padding-bottom: 0.28em;
+      text-align: left;
+      display: flex;
+      align-items: center;
+    }
+    .ctf-title:before {
+      content: "#";
+      display: inline-block;
+      font-size: 1em;
+      color: var(--second-color);
+      margin-right: 0.60em;
+      font-family: inherit;
+    }
+    /* unrounded, sharp corner boxes */
+    .nes-container {
+      border-radius: 0 !important;
+      background: #fff;
+      border: 2px solid #212529;
+      color: #212529;
+    }
+    .nes-container.with-title > .title {
+      color: #212529;
+      font-size: 1.15em;
+      letter-spacing: 1px;
+      border-radius: 0 !important;
+      margin-bottom: 1.2em;
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: normal;
+    }
+    
+    .nes-container p:not(.title),
+    .nes-container div:not(.title) {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .relax-flexgrid {
+      display: flex;
+      gap: 2rem;
+      margin: 2.5rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+    .relax-flexgrid > .nes-container {
+      flex: 1 1 320px;
+      min-width: 270px;
+    }
+    .status-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .status-card {
+      padding: 1em 0.8em 0.8em 0.8em;
+      background: #fff;
+      color: #212529;
+      border: 2px solid #212529;
+      border-radius: 0 !important;
+      position: relative;
+    }
+    
+    .status-card p {
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: normal;
+      margin: 0;
+    }
+    
+    .status-card span {
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      color: var(--second-color);
+    }
+    .status-circle {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      position: absolute;
+      top: 0.8em;
+      right: 0.8em;
+      border: 2px solid #212529;
+    }
+    .status-online {
+      background: #00ff00;
+    }
+    .status-offline {
+      background: #ff0000;
+    }
+    .nes-btn {
+      margin-top: 1em;
+      margin-bottom: 1em;
+      font-size: 1em;
+      border-color: #fff !important;
+    }
+    .copyable {
+      cursor: default;
+      color: var(--second-color);
+      background: #212529;
+      border-radius: 0 !important;
+      padding: 0.18em 0.28em;
+      font-family: "Press Start 2P", monospace;
+      font-size: 0.85em;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      max-width: 100%;
+      display: inline-block;
+    }
+    .copyable:hover {
+      background: #292e33;
+    }
+    pre {
+      font-size: 0.84em;
+      background: #f8fafd;
+      border-radius: 0 !important;
+      color: #212529;
+      padding: 0.8em 1.2em;
+      white-space: pre-wrap;
+      word-break: break-all;
+      overflow-wrap: break-word;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    a {
+      color: var(--second-color);
+    }
+    .result-success {
+      background: #fff;
+      border: 2px solid #00ff00;
+      border-radius: 0 !important;
+      padding: 1.5em;
+      margin-top: 1rem;
+      color: #212529;
+      text-align: center;
+    }
+    .result-error {
+      background: #212529;
+      border: 2px solid #ff0000;
+      border-radius: 0 !important;
+      padding: 1.5em;
+      margin-top: 1rem;
+      color: #fff;
+    }
+    .flag-box {
+      background: #212529 !important;
+      color: var(--second-color) !important;
+      border: 2px solid var(--second-color);
+      border-radius: 0 !important;
+      padding: 0.8em 1em;
+      margin: 1em 0;
+      font-family: "Press Start 2P", monospace;
+      font-size: 0.9em;
+      word-break: break-all;
+    }
+    .copy-flag-btn {
+      margin-top: 0.8em;
+      font-size: 0.8em;
+      background: #212529 !important;
+      color: #fff !important;
+      border-color: #fff !important;
+    }
+    
+    button, .nes-btn, .secondary, .small, 
+    button.nes-btn, .nes-btn.is-primary, .nes-btn.secondary, .nes-btn.small {
+      border-color: #fff !important;
+      border: 2px solid #fff !important;
+    }
+    
+    #anvilStatus, #contractsStatus, #solvedStatus, #totalContracts {
+      color: var(--second-color) !important;
+      font-weight: bold;
+    }
+    
+    article.success {
+      background: #212529;
+      border: 2px solid var(--second-color);
+      border-radius: 0 !important;
+      padding: 1.5em;
+      margin-top: 1rem;
+      color: #fff;
+      text-align: center;
+    }
+    
+    article.error {
+      background: #212529;
+      border: 2px solid #e76e55;
+      border-radius: 0 !important;
+      padding: 1.5em;
+      margin-top: 1rem;
+      color: #fff;
+    }
+    
+    .spinning-cat-container {
+      text-align: center;
+      margin: 1rem 0;
+      padding: 1rem;
+    }
+    
+    .cat-gif {
+      max-width: 200px;
+      max-height: 200px;
+      border-radius: 0;
+      margin: 0.5rem;
+    }
+    
+    @media (max-width: 720px) {
+      .nes-header .container, .nes-main-container {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+      }
+      .relax-flexgrid {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .nes-header .brand-name {
+        font-size: 1.5rem;
+        letter-spacing: 0.01em;
+      }
+      .nes-header .brand-logo {
+        font-size: 1.8em;
+      }
+      .ctf-title {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+      .copyable {
+        font-size: 0.75em;
+      }
+      pre {
+        font-size: 0.75em;
+        padding: 0.6em 0.8em;
+      }
+      .status-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .nes-header .brand-name {
+        font-size: 1.2rem;
+      }
+      .nes-header .brand-logo {
+        font-size: 1.5em;
+      }
+      .ctf-title {
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+      }
+      .copyable {
+        font-size: 0.7em;
+      }
+      pre {
+        font-size: 0.7em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nes-header">
+    <div class="container">
+      <div class="brand">
+        <i class="nes-icon nes-controller brand-logo"></i>
+        <h1 class="brand-name">lmnop</h1>
+      </div>
+    </div>
+  </header>
+  <main class="nes-main-container">
+    <h2 class="ctf-title">lmnop</h2>
+
+    <div class="relax-flexgrid" style="margin-top: 4rem;">
+      <section class="nes-container is-dark with-title">
+        <p class="title">Your Account</p>
+        <p><strong>Account Address:</strong> <span id="accountAddress" class="copyable nes-text">Loading...</span></p>
+        <p><strong>Private Key:</strong> <span id="privateKey" class="copyable nes-text">Loading...</span></p>
+      </section>
+      <section class="nes-container is-dark with-title">
+        <p class="title">Challenge Addresses</p>
+        <p><strong>Challenge:</strong> <span id="challengeAddress" class="copyable nes-text">Loading...</span></p>
+        <p><strong>Implementation:</strong> <span id="implementationAddress" class="copyable nes-text">Loading...</span></p>
+      </section>
+    </div>
+
+    <section>
+      <button id="checkBtn" class="nes-btn" onclick="checkSolve()">Check If Solved</button>
+      <div id="result" style="margin-top: 1rem;"></div>
+    </section>
+
+    <section class="nes-container is-dark with-title" style="margin: 2.5rem 0;">
+      <p class="title">Connection Info</p>
+      <p>Use the following cast command:</p>
+      <pre id="castCommand" class="copyable">Loading...</pre>
+      <p><strong>RPC URL:</strong> <span id="rpcUrl" class="copyable nes-text">Loading...</span></p>
+    </section>
+
+    <section class="nes-container is-dark with-title" style="margin: 2.5rem 0;">
+      <p class="title">Foundry Installation Guide</p>
+      <p>Install with <code>foundryup</code>:</p>
+      <pre class="copyable" data-copy="curl -L https://foundry.paradigm.xyz | bash && foundryup">curl -L https://foundry.paradigm.xyz | bash && foundryup</pre>
+      <p>More info: <a href="https://getfoundry.sh/" target="_blank">getfoundry.sh</a></p>
+    </section>
+
+    <section style="margin: 2.5rem 0;">
+      <h4 class="nes-text is-primary" style="margin-bottom:0.8em; color: var(--second-color);">Status</h4>
+      <div class="status-cards">
+        <div class="nes-container is-dark status-card">
+          <p>Anvil</p>
+          <div class="status-circle status-offline"></div>
+          <span id="anvilStatus">Loading...</span>
+        </div>
+        <div class="nes-container is-dark status-card">
+          <p>Contracts Deployed</p>
+          <div class="status-circle status-offline"></div>
+          <span id="contractsStatus">Loading...</span>
+        </div>
+        <div class="nes-container is-dark status-card">
+          <p>Challenge Solved</p>
+          <div class="status-circle status-offline"></div>
+          <span id="solvedStatus">Loading...</span>
+        </div>
+        <div class="nes-container is-dark status-card">
+          <p>Total Contracts</p>
+          <div class="status-circle status-offline"></div>
+          <span id="totalContracts">Loading...</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="nes-container is-dark with-title" style="margin-top: 2rem;">
+      <p class="title">Debug Log</p>
+      <div id="debug"></div>
+    </section>
+  </main>
+  <script>    
+    let hideResultTimeout = null;
+
+    const catGifs = [
+        {
+            url: "https://media.tenor.com/Vqv_EPaZD9kAAAAM/cats-cat-spin.gif",
+            alt: "Spinning cat",
+            title: "Spiiiiinnning!! 🐱"
+        },
+        {
+            url: "https://media.tenor.com/7t63GFnoIPUAAAAM/huh-cat-huh-m4rtin.gif",
+            alt: "Huh cat",
+            title: "Huh? 🤔"
+        },
+        {
+            url: "https://gifdb.com/images/high/spinning-cat-skill-issue-jmlubutx0q7314hd.gif",
+            alt: "Skill issue",
+            title: "Skill issue?? 🤔"
+        },
+        {
+            url: "https://media.tenor.com/_WZy7E7hoTcAAAAM/cat-smile.gif",
+            alt: "Cat spinning",
+            title: "😊"
+        },
+        {
+            url: "https://i.pinimg.com/originals/55/27/8a/55278ad88b28a94773f88a72e78cc05d.gif",
+            alt: "No way",
+            title: "🙄"
+        },
+        {
+            url: "https://media.tenor.com/xRF_8aickxwAAAAM/silly-cat-silly-car.gif",
+            alt: "Last minute",
+            title: "legit you rn"
+        },
+        {
+            url: "https://i.pinimg.com/originals/0f/eb/35/0feb35e8733b1b905bca7543d60e3fd8.gif",
+            alt: "Stretching Cat",
+            title: "damn"
+        },
+        {
+            url: "https://media1.tenor.com/m/0Q5IZ6e9pC8AAAAd/cat-cute-cat.gif",
+            alt: "Cute Cat",
+            title: "we moovin and groovin 🥹"
+        },
+        {
+            url: "https://media1.tenor.com/m/CNI1fSM1XSoAAAAd/shocked-surprised.gif",
+            alt: "Shocked Cat",
+            title: "man wtf 😱"
+        },
+        {
+            url: "https://media1.tenor.com/m/t7_iTN0iYekAAAAd/sad-sad-cat.gif",
+            alt: "Sad Cat",
+            title: "pls flag 😿"
+        },
+        {
+            url: "https://i.pinimg.com/originals/23/51/bc/2351bc65b2b5d75cef146b7edddf805b.gif",
+            alt: "Excited Cat",
+            title: "music cat"
+        },
+        {
+            url: "https://media.tenor.com/cb9L14uH-YAAAAAM/cool-fun.gif",
+            alt: "Cool Cat",
+            title: "he hitting tho 😎"
+        },
+        {
+            url: "https://media.tenor.com/pdX9YTI4_eoAAAAM/cat-cat-with-tongue.gif",
+            alt: "Cat with tongue",
+            title: "taste test! 😼"
+        },
+        {
+            url: "https://i.pinimg.com/originals/30/c2/10/30c210344bbbcde4d5542c02a0cb908b.gif",
+            alt: "Playful Cat",
+            title: "horizontal rotierende katze"
+        },
+        {
+            url: "https://media.tenor.com/zGQLL-kwwEoAAAAM/cat-meme-pee.gif",
+            alt: "Cat meme pee",
+            title: "uhh... 😬"
+        },
+        {
+            url: "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyOHB5MGt3eGM1OGkwemwxOGR2ZnA2NTkzejBlemJxdGxtb2M1c3BkOSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/WTL02R1L7YCGUEunFy/source.gif",
+            alt: "Jumping Cat",
+            title: 'AAAAAAAAA'
+        },
+        {
+            url: "https://media.tenor.com/CWZQY7DL1ykAAAAM/ahh.gif",
+            alt: "Surprised Cat",
+            title: "AAAAAAA *oooh* (u when solving chall)"
+        },
+        {
+            url: "https://i.pinimg.com/originals/c1/97/e1/c197e1fc5e0178579c3ef6e98fb33ab1.gif",
+            alt: "Cats running",
+            title: "boom 💣💥"
+        },
+        {
+            url: "https://static.wikia.nocookie.net/meme-cats/images/1/15/Chipi_Chipi_Chapa_Chapa_Cat.gif/revision/latest/thumbnail/width/360/height/360?cb=20240121174505",
+            alt: "Chipi Chipi Cat",
+            title: "chipi chipi chapa chapa"
+        }
+    ];
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    loadStatus();
+    loadInfo();
+    });
+
+    async function loadStatus() {
+    try {
+        console.log('Loading status...');
+        const response = await fetch('/api/status');
+        console.log('Status response:', response);
+
+        if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Status data:', data);
+
+        const anvilHealthy = data.health?.anvil_healthy;
+        updateStatusCard('anvilStatus', anvilHealthy ? 'Online' : 'Offline', anvilHealthy);
+
+        const contractsDeployed = data.health?.contracts_deployed;
+        updateStatusCard('contractsStatus', contractsDeployed ? 'Yes' : 'No', contractsDeployed);
+
+        const challengeSolved = data.challenge_solved;
+        updateStatusCard('solvedStatus', challengeSolved ? 'SOLVED' : 'Not Solved', challengeSolved);
+
+        const totalContracts = data.total_contracts || '0';
+        updateStatusCard('totalContracts', totalContracts, true);
+
+    } catch (error) {
+        console.error('Error loading status:', error);
+        
+        updateStatusCard('anvilStatus', 'Error', false);
+        updateStatusCard('contractsStatus', 'Error', false);
+        updateStatusCard('solvedStatus', 'Error', false);
+        updateStatusCard('totalContracts', 'Error', false);
+
+        updateDebug('Status Error: ' + error.message);
+    }
+    }
+
+    function updateStatusCard(elementId, text, isPositive) {
+    const textElement = document.getElementById(elementId);
+    const circleElement = textElement.parentElement.querySelector('.status-circle');
+
+    textElement.textContent = text;
+
+    circleElement.className = 'status-circle ' + (isPositive ? 'status-online' : 'status-offline');
+    }
+
+    async function loadInfo() {
+    try {
+        const response = await fetch('/api/info');
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const data = await response.json();
+
+        const fields = [
+        { id: 'accountAddress', value: data.user_account?.player_address },
+        { id: 'privateKey', value: data.user_account?.player_private_key },
+        { id: 'challengeAddress', value: data.contract_addresses?.challenge_address },
+        { id: 'implementationAddress', value: data.contract_addresses?.implementation_address }
+        ];
+
+        fields.forEach(({ id, value }) => {
+        const el = document.getElementById(id);
+        if (value) {
+            el.textContent = value;
+            el.setAttribute('data-copy', value);
+        } else {
+            el.textContent = 'Unavailable';
+            el.setAttribute('data-copy', '');
+        }
+        });
+
+        const rpcUrl = window.location.origin + '/rpc';
+        const implementationAddress = data.contract_addresses?.implementation_address;
+        
+        const rpcUrlEl = document.getElementById('rpcUrl');
+        rpcUrlEl.textContent = rpcUrl;
+        rpcUrlEl.setAttribute('data-copy', rpcUrl);
+        
+        const castCommand = implementationAddress 
+            ? `cast call ${implementationAddress} "isSolved()" --rpc-url ${rpcUrl}`
+            : 'Waiting for implementation address...';
+        
+        const castCommandEl = document.getElementById('castCommand');
+        castCommandEl.textContent = castCommand;
+        castCommandEl.setAttribute('data-copy', castCommand);
+        
+    } catch (error) {
+        console.error('Error loading info:', error);
+        ['accountAddress', 'privateKey', 'challengeAddress', 'implementationAddress'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = 'Error loading';
+        el.setAttribute('data-copy', '');
+        });
+        
+        const rpcUrlEl = document.getElementById('rpcUrl');
+        const castCommandEl = document.getElementById('castCommand');
+        
+        rpcUrlEl.textContent = 'Error loading';
+        rpcUrlEl.setAttribute('data-copy', '');
+        
+        castCommandEl.textContent = 'Error loading';
+        castCommandEl.setAttribute('data-copy', '');
+    }
+    }
+
+            function showResult(data) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '';
+    
+    if (hideResultTimeout) {
+        clearTimeout(hideResultTimeout);
+        hideResultTimeout = null;
+    }
+
+    if (data.error) {
+    resultDiv.innerHTML = `<article class="error"><strong>❌ Error:</strong> ${data.error}</article>`;
+    } else if (data.solved) {
+    resultDiv.innerHTML = `
+        <article class="success" style="text-align:center;">
+        <h3>🎉 Congratulations!</h3>
+        ${data.flag ? `
+            <p><strong>Flag:</strong> <span class="copyable nes-text" data-copy="${data.flag}">${data.flag}</span></p>
+        ` : ''}
+        </article>
+    `;
+    launchConfetti();
+    } else {
+    const encouragingMessages = [
+        "⏳ Hmmmm. Maybe try a different approach?",
+        "🔍 Sorry but you need to try something different...",
+        "💪 Not quite there yet. Remember, dont give up!",
+        "🧠 Maybe try to think outside the box!",
+        "🚀 Keep pushing! I know you can do it!",
+        "🔥 The grind is not over yet!",
+        "⚡ C'mon man, try analyzing the contract from a different angle.",
+        "🎯 I think you are missing something 🤔",
+        "⏳ Hmm… still not quite clicking, huh?",
+        "🔍 Yeah, I'm not feeling to give out a flag to that tx",
+        "💪 Keep at it… but, y'know, maybe smarter this time?",
+        "🧠 Might need to actually *think* for a sec here...",
+        "🚀 Uh… yeah, that's not it lol",
+        "🔥 Still cooking… but not here",
+        "⚡ Come on, you've got more in you than *that*",
+        "🎯 You're circling the target… and missing every time",
+        "Maybe actually read the thing this time? 🤓",
+        "You sure that was your best shot? 🤔",
+        "Try flipping your perspective — or literally just do something.",
+        "You're digging… but in the wrong hole",
+        "You're missing a piece… possibly several. 🤔",
+        "The tools are fine. The way you're using them… ehhh",
+        "Yeahhh… not it. Wanna try again?",
+        "That lightbulb flickered… but nope, not fully on",
+        "We're going in circles here, champ",
+        " Take a breath, then maybe… actually fix it? 🍵",
+        "⚠️ Could be worse… but could be much better too",
+        " Feels like you're *pretending* to solve it.🎭",
+        "🕵️ Something's off. Maybe investigate… for real this time?",
+        "Same exploit again man? Bold choice, but that does not change anything... 🔄",
+        "🪞 Look at it from another angle — or just look in the mirror",
+        "📌 You're close… in the same way Rome is close to Mars",
+        "💭 You *could* keep guessing… or try harder",
+        "🥽 Look deeper… since now you are just rambling",
+        "📉 Oooof. That's a downward trend right there",
+        "🎮 Wrong button. Wanna try the right one?",
+        "🌊 You're going against the current — and losing. 🤔",
+        "Insane yapping by your solvescript holy moly 🤓",
+        "Don't think blockchain is for you my friend ⛓️",
+        "you've clicked enough, here is the cat gif...",
+        "clicking again won't change anything... 🤔",
+    ];
+    const randomMessage = encouragingMessages[Math.floor(Math.random() * encouragingMessages.length)];
+    
+    const randomGif = catGifs[Math.floor(Math.random() * catGifs.length)];
+    
+    resultDiv.innerHTML = `
+        <article class="error">
+            ${randomMessage}
+            <div class="spinning-cat-container">
+                <img src="${randomGif.url}" 
+                     alt="${randomGif.alt}" 
+                     class="cat-gif" 
+                     title="${randomGif.title}">
+            </div>
+        </article>`;
+    
+    hideResultTimeout = setTimeout(() => {
+        resultDiv.innerHTML = '';
+        hideResultTimeout = null;
+    }, 10000);
+    }
+    }
+
+    function launchConfetti() {
+    confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 }
+    });
+    }
+
+
+
+    async function checkSolve() {
+    const btn = document.getElementById('checkBtn');
+    const resultDiv = document.getElementById('result');
+
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    resultDiv.innerHTML = '';
+
+    try {
+        console.log('Checking solve...');
+        const response = await fetch('/api/check_solve');
+        console.log('Check solve response:', response);
+
+        if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Check solve data:', data);
+
+        showResult(data);
+        loadStatus();
+    } catch (error) {
+        console.error('Error checking solve:', error);
+        showResult({ error: `Connection Error: ${error.message}` });
+        updateDebug('Check Solve Error: ' + error.message);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Check If Solved';
+    }
+    }
+
+    function updateDebug(message) {
+    const debugDiv = document.getElementById('debug');
+    const timestamp = new Date().toLocaleTimeString();
+    debugDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+    }
+
+    function copyCastCommand() {
+    const castCommandEl = document.getElementById('castCommand');
+    const castCommand = castCommandEl.textContent;
+    if (castCommand) {
+        navigator.clipboard.writeText(castCommand).then(() => {
+        const original = castCommandEl.textContent;
+        castCommandEl.textContent = '✅ Copied!';
+        setTimeout(() => {
+            castCommandEl.textContent = original;
+        }, 1200);
+        });
+    }
+    }
+
+    setInterval(loadStatus, 30000);
+
+    document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('copyable')) {
+        const text = e.target.getAttribute('data-copy');
+        if (!text) return;
+
+        navigator.clipboard.writeText(text).then(() => {
+        const original = e.target.textContent;
+        e.target.textContent = '✅ Copied!';
+        setTimeout(() => {
+            e.target.textContent = original;
+        }, 1000);
+        });
+    }
+    });
+  </script>
+</body>
+</html>

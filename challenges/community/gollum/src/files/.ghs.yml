@@ -1,0 +1,7 @@
+upload: false
+delete: false
+
+users:
+  - token: "in_case_i_ever_need_to_upload_123"
+    upload: true
+    delete: false

@@ -1,0 +1,25 @@
+{
+  "name": "ttwh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-strip-types backend/index.ts",
+    "start:live": "nodemon --ext * --exec pnpm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.4.1",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/express-ws": "^3.0.5",
+    "@types/ws": "^8.5.14",
+    "express": "^4.21.2",
+    "express-ws": "^5.0.2",
+    "lit": "^3.2.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
+  }
+}

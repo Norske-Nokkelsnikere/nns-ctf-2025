@@ -1,0 +1,23 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: landing
+  namespace: berg
+spec:
+  categories:
+    - misc
+    - osint
+  difficulty: easy
+  hideUntil: "2025-08-30T16:00:00+00:00"
+  displayName: Landing
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{Espevær}
+  flagFormat: NNS{...}
+  description: |
+    I just landed here, but where am I.
+    The flag is the name of the island I landed on. An example is NNS{Santorini} 
+  containers: []
+  attachments:
+    - fileName: landing.tar.gz
+      downloadUrl: "${handouts}/landing.tar.gz"

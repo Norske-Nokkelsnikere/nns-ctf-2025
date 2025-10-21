@@ -1,0 +1,37 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: web-hacker
+  namespace: berg
+spec:
+  categories:
+    - beginner
+    - web
+  difficulty: easy
+  author: piprett
+  allowOutboundTraffic: true
+  flag: NNS{wow_you_are_so_1337}
+  flagFormat: NNS{...}
+  description: |
+    Never hacked a website before? This is your guide.
+  containers:
+    - hostname: app
+      image: ${registry}:beginner-web-hacker
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.4"
+        memory: "400Mi"
+      ports:
+        - port: 3000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+

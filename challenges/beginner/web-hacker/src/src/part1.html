@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Hacker</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <h1>Your first XSS</h1>
+    <p>
+      Let's test if this "About me" functionality is vulnerable to XSS. In HTML a heading is made using
+      <code>&lth1&gtHeading&lt/h1&gt</code>. Try to add a heading to your "About me".
+    </p>
+    <main class="notice">
+      <label for="content"><strong>About me</strong></label>
+      <textarea id="content">Hi!</textarea>
+      <div id="output"></div>
+    </main>
+
+    <p>Once you are happy, use the "Next" link.</p>
+    <div class="flex">
+      <a href="/">← Previous</a>
+      <p>-</p>
+      <a href="/part2">Next →</a>
+    </div>
+
+    <script>
+      document.querySelector('#content').addEventListener('input', (e) => {
+        document.querySelector('#output').innerHTML = `<strong>Preview</strong>: <p>${e.target.value}</p>`;
+      });
+      document.querySelector('#output').innerHTML = `<strong>Preview</strong>: <p>${
+        document.querySelector('#content').value
+      }</p>`;
+    </script>
+  </body>
+</html>

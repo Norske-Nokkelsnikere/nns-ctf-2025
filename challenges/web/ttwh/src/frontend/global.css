@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    background: #121212;
+}
+main {
+    padding: 1rem;
+}
+#level-indicator {
+    color: white;
+}

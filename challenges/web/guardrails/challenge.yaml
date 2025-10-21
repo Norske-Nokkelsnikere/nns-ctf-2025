@@ -1,0 +1,32 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: guardrails
+  namespace: berg
+spec:
+  categories:
+    - web
+  difficulty: easy
+  author: Blorptopia
+  allowOutboundTraffic: false
+  flag: NNS{4sync-1s-my-pass10n}
+  flagFormat: NNS{...}
+  description: |
+    I wrote this little service to store my secrets safely. It's so secure I even store my flag in it!
+  containers:
+    - hostname: guardrails
+      image: ${registry}:web-guardrails
+      environment:
+        FLAG: NNS{4sync-1s-my-pass10n}
+
+      resourceLimits:
+        cpu: "0.5"
+        memory: "100Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+  attachments:
+    - fileName: guardrails.tar.gz
+      downloadUrl: "${handouts}/guardrails.tar.gz"

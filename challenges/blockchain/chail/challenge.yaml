@@ -1,0 +1,34 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: chail
+  namespace: berg
+spec:
+  categories:
+    - blockchain
+    - chisel
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: true
+  flag: NNS{i_th1nk_i_pr3f3r_pyja1l5_0v3r_ch1s3l_ja1l5_51nc3_i_d0nt_1ik3_th3_R3PL}
+  flagFormat: NNS{...}
+  description: |
+    fffffffffffffffffffffffffffffffffffine i will give you another challenge
+  containers:
+    - hostname: chail
+      image: ${registry}:blockchain-chail
+      dynamicFlag:
+        executable:
+          path: /root/flag
+          mode: 0o100
+      resourceLimits:
+        cpu: "1"
+        memory: "512Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+  attachments:
+    - fileName: patch
+      downloadUrl: https://github.com/DanielBoye/foundry/commit/f95ef496875454aace808e59a5d64012fe59fba4

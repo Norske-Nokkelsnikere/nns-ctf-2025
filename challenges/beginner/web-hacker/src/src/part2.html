@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Hacker</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+
+  <body>
+    <h1>Stealing cookies</h1>
+    <p>
+      Adding a heading doesn't do much damage. Instead we might want to steal the cookies of the user, which we can then
+      use to login as them. This is what we will do:
+    </p>
+    <ol>
+      <li>Create an <code>&ltimg&gt</code> tag, with an invalid <code>src</code> attribute</li>
+      <li>Execute code using the <code>onerror</code> attribute</li>
+      <li>Get the cookies using <code>document.cookie</code></li>
+      <li>
+        Send the cookies somewhere you can get them. You can for example use
+        <a href="https://webhook.site">webhook.site</a>
+      </li>
+    </ol>
+    <main class="notice">
+      <label for="content"><strong>My payload</strong></label>
+      <textarea id="content">Hi!</textarea>
+      <div id="output"></div>
+    </main>
+
+    <p>
+      For a real attack, a user would have to visit the page where you injected the HTML. In CTF competitions, we
+      instead usually use a 'XSS bot', which is an automated program pretending to be a user. When you have made a
+      payload which you believe will work, start the XSS bot!
+    </p>
+
+    <div class="notice xssbot">
+      <button>Start XSS bot</button>
+      <p id="status"><strong>Status</strong>: Idle</p>
+    </div>
+    <p>Got the flag? Use the "Next" link. Stuck? As this is a beginner challenge, you can contact support for hints.</p>
+    <div class="flex">
+      <a href="/part1">← Previous</a>
+      <p>-</p>
+      <a href="/finished">Next →</a>
+    </div>
+
+    <script>
+      const contentElm = document.querySelector('#content');
+      const outputElm = document.querySelector('#output');
+      const submitElm = document.querySelector('button');
+      const statusElm = document.querySelector('#status');
+
+      function updateStatus(status) {
+        statusElm.innerHTML = `<strong>Status</strong>: ${status}`;
+      }
+
+      contentElm.addEventListener('input', (e) => {
+        outputElm.innerHTML = `<strong>Preview</strong>: <p>${e.target.value}</p>`;
+      });
+      outputElm.innerHTML = `<strong>Preview</strong>: <p>${contentElm.value}</p>`;
+
+      submitElm.addEventListener('click', () => {
+        const code = document.querySelector('#content').value;
+        const ws = new WebSocket('/ws');
+        updateStatus('Connecting');
+        submitElm.disabled = true;
+
+        ws.addEventListener('open', () => {
+          updateStatus('Connected');
+
+          ws.send('VISIT ' + btoa(contentElm.value));
+        });
+
+        ws.addEventListener('close', () => {
+          updateStatus('Disconnected');
+        });
+
+        ws.addEventListener('error', (e) => {
+          updateStatus('Infrastructure issue! Probably not your fault');
+          console.warn('WS error', e);
+        });
+
+        ws.addEventListener('message', (msg) => {
+          if (msg.data === 'ERR') {
+            updateStatus('Server error during page visit');
+          } else if (msg.data === 'VISITING') {
+            updateStatus('Opening browser');
+          } else if (msg.data === 'DONE') {
+            updateStatus('Browser closed');
+            submitElm.disabled = false;
+          } else if (msg.data === 'OPENED') {
+            updateStatus('Page opened');
+          } else if (msg.data === 'WAITING') {
+            updateStatus('Executing your code');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

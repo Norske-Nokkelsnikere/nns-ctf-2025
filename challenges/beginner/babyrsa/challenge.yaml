@@ -1,0 +1,21 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: babyrsa
+  namespace: berg
+spec:
+  categories:
+    - beginner
+    - crypto
+  difficulty: easy
+  author: Zukane
+  displayName: babyrsa
+  allowOutboundTraffic: false
+  flag: NNS{g00d_y0u_kn0w_b4by_RS4}
+  flagFormat: NNS{...}
+  description: |
+    Think you know RSA? Then we've got one thing in common
+  containers: []
+  attachments:
+    - fileName: babyrsa.tar.gz
+      downloadUrl: "${handouts}/babyrsa.tar.gz"

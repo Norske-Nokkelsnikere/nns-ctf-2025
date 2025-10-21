@@ -1,0 +1,40 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: linktea
+  namespace: berg
+spec:
+  categories:
+    - web
+  difficulty: easy
+  author: piprett
+  allowOutboundTraffic: true
+  flag: NNS{cool_chromium_cve_or_something}
+  flagFormat: NNS{...}
+  description: |
+    I heard "link-in-bio" sites were the hot new thing, so I gave it a shot.<br />
+    The report reviewer uses Chrome 136.<br />
+    There is no need to bruteforce in this challenge.
+  containers:
+    - hostname: app
+      image: ${registry}:web-linktea
+      # Vanskelig å anslå hvor mye den bruker, men har chromium
+      # På PCen min brukte den rundt 500mb ram mens chromium var åpen
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "1"
+        memory: "600Mi"
+      ports:
+        - port: 3001
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3001 
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments: []

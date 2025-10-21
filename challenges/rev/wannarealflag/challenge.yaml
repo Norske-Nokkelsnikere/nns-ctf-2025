@@ -1,0 +1,19 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: wannarealflag
+  namespace: berg
+spec:
+  categories:
+    - rev
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: false
+  flag: NNS{https://4ttr1but3-t0-m4rcu5-hu7ch1n5.ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.no}
+  flagFormat: NNS{...}
+  description: |
+    A real flag is better than a fake one. Unfortunately, the program that should print the flag seems buggy? I can't get it to output the correct flag.<br><br>Flag format: NNS{url}
+  containers: []
+  attachments:
+    - fileName: wannarealflag.tar.gz
+      downloadUrl: "${handouts}/wannarealflag.tar.gz"

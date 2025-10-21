@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>man</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+  </head>
+  <body>
+    <h1>man</h1>
+    <p>Get manuals for any Linux program that I have installed</p>
+
+    <form>
+      <label for="program">Program</label>
+      <input type="text" id="program" name="program" />
+      <button type="submit">Get manuals</button>
+    </form>
+    <code></code>
+    <script>
+      document.querySelector('form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const res = await fetch('/man', {
+          method: 'POST',
+          body: JSON.stringify({
+            program: document.querySelector('input').value,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const json = await res.json();
+        document.querySelector('code').innerText = json.result || 'Failure';
+      });
+    </script>
+  </body>
+</html>

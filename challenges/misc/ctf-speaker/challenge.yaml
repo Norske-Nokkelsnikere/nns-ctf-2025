@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: ctf-speaker
+  namespace: berg
+spec:
+  displayName: CTF speaker
+  categories:
+    - misc
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{5n1ff1ng_HCI_t0_pl4y_s0und}
+  flagFormat: NNS{...}
+  description: |
+    I heard some strange sounds at the last CTF I attended, so I got out my analyser.
+  containers: []
+  attachments:
+    - fileName: ctf-speaker.tar.gz
+      downloadUrl: "${handouts}/ctf-speaker.tar.gz"

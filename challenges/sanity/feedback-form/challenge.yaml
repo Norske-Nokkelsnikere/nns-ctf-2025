@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: feedback-form
+  namespace: berg
+spec:
+  displayName: "Feedback Form"
+  categories:
+    - sanity
+  difficulty: easy
+  author: 0xle
+  allowOutboundTraffic: false
+  flag: "NNS{Th4nk_y0u_f0r_th3_f33db4ck!!}"
+  flagFormat: NNS{...}
+  description: |
+    The CTF is coming to an end, and we would like your feedback!
+  containers: []
+  attachments:
+    - fileName: Feedback Form
+      downloadUrl: https://forms.gle/zFTz662p9Ew4jdAP9

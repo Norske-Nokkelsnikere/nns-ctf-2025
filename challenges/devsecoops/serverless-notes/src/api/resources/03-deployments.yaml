@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agile-devsecoops-certified-app
+  namespace: devsecoops
+  labels:
+    app: agile-devsecoops-certified-app
+  annotations:
+    scrum.tech/certified-agile-app: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agile-devsecoops-certified-app
+  template:
+    metadata:
+      labels:
+        app: agile-devsecoops-certified-app
+      annotations:
+        scrum.tech/certified-agile-app: "1"
+    spec:
+      containers:
+        - name: app
+          image: based.agile.tech.nnsc.tf/agile-devsecoops-certified-app:latest
+      serviceAccountName: scrum-daddy-2604d58b82f3a6cb

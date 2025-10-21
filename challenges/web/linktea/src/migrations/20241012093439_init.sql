@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY NOT NULL,
+  username TEXT NOT NULL,
+  password TEXT NOT NULL,
+  avatar_url TEXT NOT NULL,
+  bio TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS codes (
+  code TEXT PRIMARY KEY NOT NULL,
+  user_id TEXT NOT NULL
+);

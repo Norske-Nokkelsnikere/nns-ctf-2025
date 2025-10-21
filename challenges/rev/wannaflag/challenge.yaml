@@ -1,0 +1,19 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: wannaflag
+  namespace: berg
+spec:
+  categories:
+    - rev
+  difficulty: easy
+  author: hoover
+  allowOutboundTraffic: false
+  flag: NNS{w4nn4cry_k1ll5w1th_1n_4_d0t_n0_d0m41n_15_funny_151nt_1t?????}
+  flagFormat: NNS{...}
+  description: |
+    Psst, don't tell the organizers, but do you want a flag? Just run this and get a free flag! Please try it out and see for yourself. Isn't it great to get free flags like that?
+  containers: []
+  attachments:
+    - fileName: wannaflag.tar.gz
+      downloadUrl: "${handouts}/wannaflag.tar.gz"

@@ -1,0 +1,1 @@
+The server does not really give you a lot of feedback, so if you want to test things out on your own, go to https://live.lean-lang.org/

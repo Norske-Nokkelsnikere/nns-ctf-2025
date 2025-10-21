@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: dsp
+  namespace: berg
+spec:
+  displayName: DSP
+  categories:
+    - rev
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{th15_fl4g_1s_c0nvo1ut3d}
+  flagFormat: NNS{...}
+  description: |
+    This nRF52840 based flag checker accepts an analogue flag signal and performs digital signal processing on it. If the flag is detected, it lights up an LED.
+  containers: []
+  attachments:
+    - fileName: dsp.tar.gz
+      downloadUrl: "${handouts}/dsp.tar.gz"

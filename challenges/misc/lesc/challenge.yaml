@@ -1,0 +1,20 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: lesc
+  namespace: berg
+spec:
+  displayName: LE Secure Connections
+  categories:
+    - misc
+  difficulty: easy
+  author: simen e
+  allowOutboundTraffic: false
+  flag: NNS{l3ak1ng_th3_l0ng_t3rm_key_t0_de3rypt_0ld_data}
+  flagFormat: NNS{...}
+  description: |
+    I sniffed that someone was reading the flag, but I think it is encrypted.
+  containers: []
+  attachments:
+    - fileName: lesc.tar.gz
+      downloadUrl: "${handouts}/lesc.tar.gz"

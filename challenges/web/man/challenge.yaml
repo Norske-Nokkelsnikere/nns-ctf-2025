@@ -1,0 +1,40 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: man
+  namespace: berg
+spec:
+  categories:
+    - web
+  difficulty: easy
+  author: piprett
+  allowOutboundTraffic: true
+  flag: NNS{you_should_validate_your_inputs}
+  flagFormat: NNS{...}
+  description: |
+    I had to get the manuals for my GNU/Linux commands, so I made this.<br />
+    Flag is at /get_flag
+  containers:
+    - hostname: app
+      image: ${registry}:web-man
+      dynamicFlag:
+        executable:
+          path: /get_flag
+          mode: 0o111
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 3000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 3000 
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: man.tar.gz
+      downloadUrl: "${handouts}/man.tar.gz"

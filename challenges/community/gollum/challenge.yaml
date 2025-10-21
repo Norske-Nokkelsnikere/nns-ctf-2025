@@ -1,0 +1,40 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: gollum
+  namespace: berg
+spec:
+  displayName: GOllum
+  categories:
+    - web
+    - community
+  difficulty: easy
+  author: Vealending
+  allowOutboundTraffic: false
+  flag: NNS{sn3aky_little_h0bbits3s}
+  flagFormat: NNS{...}
+  description: |
+    Yess, you can looks at it… but not takes it away, preciousss. No, no, never removes it!
+  containers:
+    - hostname: app
+      image: ${registry}:community-gotohell
+      dynamicFlag:
+        env:
+          name: FLAG
+      resourceLimits:
+        cpu: "0.5"
+        memory: "128Mi"
+      ports:
+        - port: 80
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: gollum.tar.gz
+      downloadUrl: "${handouts}/gollum.tar.gz"

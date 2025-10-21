@@ -1,0 +1,33 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: alpha
+  namespace: berg
+spec:
+  categories:
+    - pwn
+    - community
+  difficulty: easy
+  author: Vealending
+  allowOutboundTraffic: false
+  flag: NNS{sh0uld_h4ve_impl3m3nt3d_b0g0sort_inst34d}
+  flagFormat: NNS{...}
+  description: |
+    I read online that aligning your shellcode is really important.
+  containers:
+    - hostname: alpha
+      image: ${registry}:community-alpha
+      resourceLimits:
+        cpu: "0.2"
+        memory: "256Mi"
+      ports:
+        - port: 1337
+          protocol: tcp
+          appProtocol: tcp
+          type: publicTlsRoute
+      dynamicFlag:
+        content:
+          path: /opt/flag.txt
+  attachments:
+    - fileName: alpha.tar.gz
+      downloadUrl: "${handouts}/alpha.tar.gz"

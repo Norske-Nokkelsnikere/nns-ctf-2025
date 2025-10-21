@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Cloud-native chat</title>
+  </head>
+  <body class="h-full">
+    <div class="mx-auto max-w-4xl w-full p-4 flex flex-col h-full">
+      <div class="flex flex-row gap-2">
+        <h1 class="text-3xl">Cloud-native chat</h1>
+        <img
+          src="/certification.png"
+          height="20"
+          width="60"
+          alt="certification"
+          class="object-contain"
+        />
+      </div>
+      <p class="mt-2">
+        Say hello 👋 the cloud-native way — through 14 microservices 🧱, 3
+        message queues 📨, 2 load balancers ⚖️, and a very confused pod 🐳.
+        Built to scale 📈 (and sometimes crash 🧨), it's the chat app that turns
+        "ping" into an event-driven journey ✈️. Because who needs simplicity
+        when you have Kubernetes 🧭, observability dashboards 📊, and an
+        always-growing AWS bill 💳💸? #CloudVibesOnly 🌩️ #EnterpriseGrade(ish)
+        🏗️ #DevSecOops 🔐💥
+      </p>
+      <div
+        id="messages-container"
+        class="flex flex-col flex-1 py-4 min-h-0 overflow-auto gap-2"
+      ></div>
+      <div>
+        <div class="text-xs mb-1 text-neutral-700 font-bold">
+          Chatting as <span id="chat-nick"></span>
+        </div>
+        <input
+          id="chat-input"
+          type="text"
+          placeholder="Send your cloud native message..."
+          class="w-full rounded-md border-1 border-neutral-300 p-3"
+        />
+      </div>
+    </div>
+  </body>
+  <script>
+    const randomWords = [
+      "banana",
+      "eclipse",
+      "wander",
+      "plasma",
+      "gadget",
+      "nebula",
+      "sprout",
+      "jazz",
+      "quartz",
+      "nimbus",
+      "rocket",
+      "cipher",
+      "ember",
+      "toggle",
+      "velvet",
+      "pixel",
+      "crimson",
+      "whistle",
+      "glimmer",
+      "orbit",
+      "breeze",
+      "fusion",
+      "spider",
+      "clutch",
+      "marble",
+      "knuckle",
+      "riddle",
+      "fluent",
+      "puzzle",
+      "snorkel",
+      "zebra",
+      "lantern",
+    ];
+
+    function getRandomWord() {
+      return randomWords[~~(randomWords.length * Math.random())];
+    }
+
+    async function sendMessage(message) {
+      try {
+        await fetch("/api/rooms/chat.public", {
+          method: "POST",
+          body: JSON.stringify({
+            author: nick,
+            content: message,
+          }),
+          headers: {
+            "x-nats-reply-to": "",
+          },
+        });
+      } catch (e) {
+        console.error("oops", e);
+      }
+    }
+
+    const messagesContainer = document.getElementById("messages-container");
+    function handleMessage(data) {
+      const element = document.createElement("div");
+      element.classList.add("chat-message");
+
+      const author = document.createElement("div");
+      author.textContent = data.author;
+      author.classList.add("font-bold");
+
+      const content = document.createElement("div");
+      content.textContent = data.content;
+
+      element.appendChild(author);
+      element.appendChild(content);
+      messagesContainer.appendChild(element);
+    }
+
+    function subscribeMessages() {
+      // TODO: Support the admin chat if the user is authenticated
+      const stream = new EventSource("/api/rooms/chat.public");
+      stream.onmessage = (e) => {
+        try {
+          const data = JSON.parse(e.data);
+          if (
+            typeof data === "object" &&
+            typeof data["author"] === "string" &&
+            typeof data["content"] === "string"
+          ) {
+            handleMessage(data);
+          }
+        } catch (err) {
+          console.error("oops", err);
+        }
+      };
+      stream.onerror = (e) => {
+        console.error("???", e);
+      };
+    }
+
+    subscribeMessages();
+
+    const nick = [getRandomWord(), getRandomWord()].join(" ");
+    document.getElementById("chat-nick").textContent = nick;
+
+    const chatInput = document.getElementById("chat-input");
+    chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (message.length !== 0) {
+          chatInput.value = "";
+          sendMessage(message);
+        }
+      }
+    });
+  </script>
+</html>

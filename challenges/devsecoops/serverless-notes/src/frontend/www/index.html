@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>Notes</title>
+</head>
+<body class="flex flex-col items-center">
+<div class="max-w-6xl w-full p-8">
+  <h1 class="text-3xl font-bold">Notes</h1>
+  <div>
+    Serverless applications may take a while to warm up... Please be patient!
+  </div>
+  <div class="grid grid-cols-2 md:grid-cols-3 mt-4 gap-1">
+    <div id="create-note-btn" class="rounded-md border border-neutral-200 p-4 cursor-pointer bg-linear-to-t from-blue-500 to-violet-500 text-white" role="button">
+      <div class="font-bold">
+        Create note
+      </div>
+      <p>
+        Start imagining...
+      </p>
+    </div>
+    <div id="notes-container" class="contents">
+    </div>
+  </div>
+</div>
+<script>
+    const notes = [];
+
+    function persistNotesIndex() {
+        const index = notes.map(note => note.metadata.name);
+        localStorage.setItem("notes", JSON.stringify(index));
+    }
+
+    async function loadNotes() {
+        const index = JSON.parse(localStorage.getItem("notes") ?? "[]");
+        for (const id of index) {
+            try {
+                const note = await fetch(`/apis/nnsctf.no/v1/namespaces/default/notes/${id}`)
+                    .then(res => res.json());
+                notes.push(note)
+            } catch (e) {
+                console.error("was?", e);
+            }
+        }
+    }
+
+    async function createNote(title, content) {
+        const id = crypto.randomUUID();
+        return await fetch(
+            `/apis/nnsctf.no/v1/namespaces/default/notes/${id}`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    apiVersion: "nnsctf.no/v1",
+                    kind: "Note",
+                    metadata: {name: id},
+                    spec: {title, content}
+                }),
+                headers: {
+                    "content-type": "application/json"
+                }
+            }
+        ).then(res => res.json());
+    }
+
+    function renderNotes() {
+        const container = document.getElementById("notes-container");
+        container.innerHTML = "";
+
+        for (const note of notes) {
+            const elem = document.createElement("div");
+            elem.classList.add("rounded-md", "border", "border-neutral-200", "p-4");
+
+            const titleElem = document.createElement("div");
+            titleElem.classList.add("font-bold");
+            titleElem.textContent = note.spec.title;
+
+            const contentElem = document.createElement("p");
+            contentElem.textContent = note.spec.content;
+
+            elem.append(titleElem, contentElem);
+            container.appendChild(elem);
+        }
+    }
+
+    function attachEventListeners() {
+        document.getElementById("create-note-btn").addEventListener("click", async () => {
+            try {
+                const title = prompt("What should the title of the note be?");
+                const content = prompt("What should the content of the note be?");
+                const note = await createNote(title, content);
+                if (typeof note["spec"] !== "object") {
+                    alert("a bad happened!!");
+                    return;
+                }
+                notes.push(note);
+                persistNotesIndex();
+                renderNotes();
+            } catch (e) {
+                console.error("was?", e);
+                alert("a bad happened!!");
+            }
+        });
+    }
+
+    attachEventListeners();
+    (async () => {
+        await loadNotes();
+        renderNotes();
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+apiVersion: berg.norelect.ch/v1
+kind: Challenge
+metadata:
+  name: ttwh
+  namespace: berg
+spec:
+  displayName: "This then what huh?"
+  categories:
+    - web
+  difficulty: easy
+  author: Blorptopia
+  allowOutboundTraffic: false
+  flag: NNS{th1s-w4s-qu1te-4n-4dv3nture}
+  flagFormat: NNS{...}
+  description: |
+    Ponies missing :( return if found
+  containers:
+    - hostname: ttwh
+      image: ${registry}:web-ttwh
+      environment:
+        FLAG: NNS{th1s-w4s-qu1te-4n-4dv3nture}
+
+      resourceLimits:
+        cpu: "0.2"
+        memory: "100Mi"
+      ports:
+        - port: 8000
+          protocol: tcp
+          appProtocol: http
+          type: publicHttpRoute
+      readinessProbe:
+        httpGet:
+          path: /ui
+          port: 8000
+        initialDelaySeconds: 0
+        periodSeconds: 1
+  attachments:
+    - fileName: ttwh.tar.gz
+      downloadUrl: "${handouts}/ttwh.tar.gz"
